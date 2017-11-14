@@ -6,6 +6,7 @@ Pre-installation
  - Clone repo 
  - run "git checkout development-setup"
  - run "npm install"
+ - meteor npm install --save bcrypt
  - run "npm install -g reaction-cli"
  - run "reaction run" or just "reaction"
  Install the neccessary files while reaction is running.
