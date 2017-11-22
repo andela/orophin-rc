@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Components } from "@reactioncommerce/reaction-components";
 import { ReactionLayout } from "/imports/plugins/core/layout/lib";
+import { Review } from "./review";
 
 class ProductDetail extends Component {
   get tags() {
@@ -48,6 +49,7 @@ ProductDetail.propTypes = {
   onViewContextChange: PropTypes.func,
   priceRange: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   product: PropTypes.object,
+  review: PropTypes.arrayOf(PropTypes.object),
   socialComponent: PropTypes.node,
   tags: PropTypes.arrayOf(PropTypes.object),
   topVariantComponent: PropTypes.node,

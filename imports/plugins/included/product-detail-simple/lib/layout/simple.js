@@ -78,6 +78,18 @@ export default function blocks() {
         // Metadata
         {
           component: "ProductMetadata"
+        },
+        // Review Field
+        {
+          component: "Review",
+          props: {
+            createdAt: "createdAt",
+            message: "message",
+            username: "username",
+            style: {
+              paddingTop: 20
+            }
+          }
         }
       ]
     },
@@ -185,6 +197,17 @@ export default function blocks() {
         {
           component: "AddToCartButton",
           props: {
+            style: {
+              paddingTop: 20
+            }
+          }
+        },
+
+        // Ratings Field
+        {
+          component: "Ratings",
+          props: {
+            averageRating: 4,
             style: {
               paddingTop: 20
             }
