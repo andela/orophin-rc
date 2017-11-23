@@ -81,15 +81,7 @@ export default function blocks() {
         },
         // Review Field
         {
-          component: "Review",
-          props: {
-            createdAt: "createdAt",
-            message: "message",
-            username: "username",
-            style: {
-              paddingTop: 20
-            }
-          }
+          component: "Review"
         }
       ]
     },
