@@ -9,7 +9,9 @@ import {
   PriceRange,
   AddToCartButton,
   ProductNotFound,
-  ProductDetail
+  ProductDetail,
+  ProductRatings,
+  ProductReviews
 } from "./components";
 
 import {
@@ -40,3 +42,5 @@ registerComponent("VariantListContainer", VariantListContainer);
 registerComponent("AddToCartButton", AddToCartButton);
 registerComponent("Divider", Divider);
 registerComponent("ProductNotFound", ProductNotFound);
+registerComponent("Reviews", ProductReviews);
+registerComponent("Ratings", ProductRatings);

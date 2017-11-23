@@ -8,3 +8,6 @@ export { default as ProductTags } from "./tags";
 export { default as ProductField } from "./productField";
 export { default as PriceRange } from "./priceRange";
 export { default as ProductNotFound } from "./productNotFound";
+export { default as ProductRatings } from "./productRatings";
+export { default as ProductReviews } from "./productReviews";
+

@@ -49,7 +49,7 @@ export default function blocks() {
 
     // Media block
     // Contains
-    // - Medai Gallery
+    // - Medaia Gallery
     // - Tags
     // - Details
     {
@@ -81,7 +81,6 @@ export default function blocks() {
         }
       ]
     },
-
     // Variant block
     {
       type: "block",
@@ -189,8 +188,39 @@ export default function blocks() {
               paddingTop: 20
             }
           }
+        },
+        // Ratings Field
+        {
+          component: "ProductRatings",
+          props: {
+            averageRating: 3.6,
+            totalRaters: 122,
+            style: {
+              paddingTop: 20
+            }
+          }
         }
 
+      ]
+    },
+    // Review Field
+    {
+      type: "block",
+      columns: 12,
+      element: "section",
+      children: [
+        {
+          component: "ProductReviews",
+          className: "container",
+          props: {
+            createdAt: "createdAt",
+            message: "message",
+            username: "username",
+            style: {
+              paddingTop: 20
+            }
+          }
+        }
       ]
     }
   ];
