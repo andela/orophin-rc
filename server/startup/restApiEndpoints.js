@@ -179,17 +179,10 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
 
 export default () => {
   creatRestApiFor("Accounts", collections.Accounts);
-  creatRestApiFor("Assets", collections.Assets);
   creatRestApiFor("Cart", collections.Cart);
   creatRestApiFor("Emails", collections.Emails);
-  creatRestApiFor("Groups", collections.Groups);
   creatRestApiFor("Inventory", collections.Inventory);
   creatRestApiFor("Orders", collections.Orders);
-  creatRestApiFor("Tags", collections.Tags);
-  creatRestApiFor("Packages", collections.Packages);
   creatRestApiFor("Products", collections.Products);
-  creatRestApiFor("Revisions", collections.Revisions);
-  creatRestApiFor("Shipping", collections.Shipping);
   creatRestApiFor("Shops", collections.Shops);
-  creatRestApiFor("Sms", collections.Sms);
 };
