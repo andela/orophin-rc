@@ -146,7 +146,7 @@ class ReviewsComponent extends Component {
                   Update
                   </Button>
                   <Button
-                    className="btn review-btn"
+                    className="btn review-btn close-btn"
                     onClick={this.setEditMode}
                   >
                   Close

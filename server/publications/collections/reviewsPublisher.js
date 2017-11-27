@@ -5,7 +5,7 @@ const reviewsPublisher = (id, collectionType) => {
   if (!id) {
     return this.ready();
   }
-  return collectionType.find({ revieweeId: id  });
+  return collectionType.find({ revieweeId: id });
 };
 
 export default reviewsPublisher;
