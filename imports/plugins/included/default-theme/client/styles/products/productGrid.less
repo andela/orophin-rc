@@ -4,6 +4,12 @@
   a:hover, a:visited, a:link, a:active {
     text-decoration: none;
   }
+  box-shadow: 0px 15px 15px #bebebe;
+  padding: 30px;
+  background-color: white;
+  margin-right: 18px;
+  margin-left: 18px;
+  margin-top: 30px
 }
 
 
@@ -29,12 +35,14 @@
 }
 
 .product-grid-item .overlay-title {
-  text-transform: uppercase;
-  font-size: @font-size-base;
-  font-weight: 400;
+  text-transform: capitalize;
+  font-weight: 600;
   text-align: center;
-  word-break: break-word;
-  word-break: initial;
+  font-size: 20px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  color: #fe7922;
 }
 
 .product-grid-item-alerts {
@@ -104,11 +112,14 @@
   }
 
   .product-image {
-    display: block;
     width: 100%;
     height: 100%;
     background-size: cover;
     background-position: center center;
+    display:block;
+    position:relative;
+    -webkit-transition:all .4s linear;
+    transition:all .4s linear;
 
     img {
       display: none;
@@ -119,6 +130,12 @@
         display: block;
       }
     }
+  }
+
+  .product-image:hover {
+    -ms-transform:scale(1.2);
+    -webkit-transform:scale(1.2);
+    transform:scale(1.2);
   }
 
   .product-grid-item-images {
