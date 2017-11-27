@@ -42,13 +42,13 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
             const all = collection.find().fetch();
             if (!all) {
               return {
-                status: "failure",
+                status: "failed",
                 statusCode: 404,
                 message: `No ${collectionName} found!`
               };
             }
             return {
-              status: "sucess",
+              status: "success",
               statusCode: 200,
               data: {
                 collectionName: all
@@ -56,7 +56,7 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
             };
           }
           return {
-            statusCode: 403, status: "fail",
+            statusCode: 403, status: "failed",
             message: "You do not have permission to add a record"
           };
         }
@@ -89,7 +89,7 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
             }
           }
           return {
-            statusCode: 403, status: "fail",
+            statusCode: 403, status: "failed",
             message: "You do not have permission to add a record"
           };
         }
@@ -109,13 +109,13 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
               };
             }
             return {
-              status: "failure",
+              status: "failed",
               statusCode: 404,
               message: `Could not find ${collectionName} with id ${this.urlParams.id}`
             };
           }
           return {
-            statusCode: 403, status: "fail",
+            statusCode: 403, status: "failed",
             message: "You do not have permission to add a record"
           };
         }
@@ -141,7 +141,7 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
             };
           }
           return {
-            statusCode: 403, status: "fail",
+            statusCode: 403, status: "failed",
             message: "You do not have permission to add a record"
           };
         }
@@ -167,7 +167,7 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
             };
           }
           return {
-            statusCode: 403, status: "fail",
+            statusCode: 403, status: "failed",
             message: "You do not have permission to add a record"
           };
         }
