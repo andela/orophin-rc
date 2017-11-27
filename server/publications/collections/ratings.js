@@ -1,12 +1,16 @@
-import { Ratings } from "/lib/collections";
+import { ProductRatings } from "/lib/collections";
 import { Meteor } from "meteor/meteor";
+import { check } from "meteor/check";
 
-Meteor.publish("Ratings", function () {
-  let total = 0;
-  Ratings.find({
-    productId: this.productId
-  }).map(function (doc) {
-    total += doc.ratingsScore;
-  });
-  return total;
+/**
+ * productRatings publication
+ * @param {String} productId - id of the current product
+ * @return {Object} return product cursor
+ */
+Meteor.publish("ProductRatings", function (productId) {
+  check(productId, String);
+  if (productId === "") {
+    return this.ready();
+  }
+  return ProductRatings.find({ productId: productId  });
 });
