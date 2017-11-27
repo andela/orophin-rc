@@ -36,9 +36,7 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
       getAll: {
         authRequired: true,
         action() {
-          if (hasPermission(this.user, "admin")
-            || hasPermission(this.user, "guest")
-            || hasPermission(this.user, "owner")) {
+          if (hasPermission(this.user, "admin") || hasPermission(this.user, "guest") || hasPermission(this.user, "owner")) {
             const all = collection.find().fetch();
             if (!all) {
               return {
@@ -64,8 +62,7 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
       post: {
         authRequired: true,
         action() {
-          if (hasPermission(this.user, "admin")
-            || hasPermission(this.user, "owner")) {
+          if (hasPermission(this.user, "admin") || hasPermission(this.user, "owner")) {
             let error = false;
             let id;
             if (this.bodyParams) {
@@ -97,9 +94,7 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
       get: {
         authRequired: true,
         action() {
-          if (hasPermission(this.user, "admin")
-            || hasPermission(this.user, "guest")
-            || hasPermission(this.user, "owner")) {
+          if (hasPermission(this.user, "admin") || hasPermission(this.user, "guest") || hasPermission(this.user, "owner")) {
             const found = collection.findOne(this.urlParams.id);
             if (found !== undefined) {
               return {
@@ -124,8 +119,7 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
       put: {
         authRequired: true,
         action() {
-          if (hasPermission(this.user, "admin")
-            || hasPermission(this.user, "owner")) {
+          if (hasPermission(this.user, "admin") || hasPermission(this.user, "owner")) {
             const updated = collection.update(this.urlParams.id, this.bodyParams, { upsert: true });
             if (!updated) {
               return {
@@ -150,8 +144,7 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
       delete: {
         authRequired: true,
         action() {
-          if (hasPermission(this.user, "admin")
-            || hasPermission(this.user, "owner")) {
+          if (hasPermission(this.user, "admin") || hasPermission(this.user, "owner")) {
             if (collection.remove(this.urlParams.id)) {
               return {
                 status: "success",
