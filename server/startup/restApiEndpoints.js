@@ -99,12 +99,12 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
         authRequired: true,
         action() {
           if (hasPermission(this.user, "admin") || hasPermission(this.user, "guest") || hasPermission(this.user, "owner")) {
-            const foundCollection = collection.findOne(this.urlParams.id);
-            if (foundCollection !== undefined) {
+            const foundItems = collection.findOne(this.urlParams.id);
+            if (foundItems !== undefined) {
               return {
                 status: "success",
                 statusCode: 200,
-                data: foundCollection
+                data: foundItems
               };
             }
             return {
@@ -124,8 +124,8 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
         authRequired: true,
         action() {
           if (hasPermission(this.user, "admin") || hasPermission(this.user, "owner")) {
-            const updatedCollection = collection.update(this.urlParams.id, this.bodyParams, { upsert: true });
-            if (!updatedCollection) {
+            const updatedItem = collection.update(this.urlParams.id, this.bodyParams, { upsert: true });
+            if (!updatedItem) {
               return {
                 status: "failed",
                 statusCode: 500,
