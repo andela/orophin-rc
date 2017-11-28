@@ -1,0 +1,39 @@
+{
+  "name": "orophin-rc",
+  "scripts": {
+  },
+  "env": {
+    "BUILDPACK_CLEAR_CACHE": {
+      "required": true
+    },
+    "BUILDPACK_PRELAUNCH_METEOR": {
+      "required": true
+    },
+    "MONGO_URL": {
+      "required": true
+    },
+    "MONGODB_URI": {
+      "required": true
+    },
+    "MONGOLAB_AMBER_URI": {
+      "required": true
+    },
+    "PAPERTRAIL_API_TOKEN": {
+      "required": true
+    },
+    "ROOT_URL": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "mongolab",
+    "papertrail"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/swrdfish/meteor-buildpack-horse.git"
+    }
+  ]
+}
