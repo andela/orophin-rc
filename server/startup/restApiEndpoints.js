@@ -1,4 +1,6 @@
+
 import collections from "../../lib/collections";
+
 import Reaction from "/server/api/core";
 
 
@@ -11,6 +13,7 @@ import Reaction from "/server/api/core";
 const hasPermission = (user, role) => {
   return user.roles[Reaction.getShopId()].includes(role);
 };
+
 
 const Api = new Restivus({
   apiPath: "api",
@@ -31,6 +34,7 @@ const Api = new Restivus({
  */
 function creatRestApiFor(collectionName, collection, restApi = Api) {
   restApi.addCollection(collection, {
+    path: collectionName,
     routeOptins: { authRequired: true },
     endpoints: {
       getAll: {
@@ -49,7 +53,7 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
               status: "success",
               statusCode: 200,
               data: {
-                collectionName: all
+                all
               }
             };
           }
@@ -95,12 +99,12 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
         authRequired: true,
         action() {
           if (hasPermission(this.user, "admin") || hasPermission(this.user, "guest") || hasPermission(this.user, "owner")) {
-            const found = collection.findOne(this.urlParams.id);
-            if (found !== undefined) {
+            const foundCollection = collection.findOne(this.urlParams.id);
+            if (foundCollection !== undefined) {
               return {
                 status: "success",
                 statusCode: 200,
-                data: found
+                data: foundCollection
               };
             }
             return {
@@ -120,8 +124,8 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
         authRequired: true,
         action() {
           if (hasPermission(this.user, "admin") || hasPermission(this.user, "owner")) {
-            const updated = collection.update(this.urlParams.id, this.bodyParams, { upsert: true });
-            if (!updated) {
+            const updatedCollection = collection.update(this.urlParams.id, this.bodyParams, { upsert: true });
+            if (!updatedCollection) {
               return {
                 status: "failed",
                 statusCode: 500,
@@ -131,7 +135,7 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
             return {
               status: "success",
               statusCode: 200,
-              data: updated
+              data: updatedCollection
             };
           }
           return {
@@ -171,11 +175,11 @@ function creatRestApiFor(collectionName, collection, restApi = Api) {
 
 
 export default () => {
-  creatRestApiFor("Accounts", collections.Accounts);
-  creatRestApiFor("Cart", collections.Cart);
-  creatRestApiFor("Emails", collections.Emails);
-  creatRestApiFor("Inventory", collections.Inventory);
-  creatRestApiFor("Orders", collections.Orders);
-  creatRestApiFor("Products", collections.Products);
-  creatRestApiFor("Shops", collections.Shops);
+  creatRestApiFor("accounts", collections.Accounts);
+  creatRestApiFor("cart", collections.Cart);
+  creatRestApiFor("emails", collections.Emails);
+  creatRestApiFor("inventory", collections.Inventory);
+  creatRestApiFor("orders", collections.Orders);
+  creatRestApiFor("products", collections.Products);
+  creatRestApiFor("shops", collections.Shops);
 };
