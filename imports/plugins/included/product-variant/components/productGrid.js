@@ -1,10 +1,25 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Components } from "@reactioncommerce/reaction-components";
+import { Reaction } from "/client/api";
+import startTour  from "../../tour/takeTour";
 
 class ProductGrid extends Component {
   static propTypes = {
     products: PropTypes.array
+  }
+
+  componentDidMount() {
+    const hasTakenGuestTour = localStorage.getItem("hasTakenGuestTour");
+    const hasTakenVendorTour = localStorage.getItem("hasTakenVendorTour");
+    if (!hasTakenGuestTour && !Reaction.hasPermission("admin")) {
+      localStorage.setItem("hasTakenGuestTour", true);
+      startTour();
+    }
+    if (!hasTakenVendorTour && Reaction.hasPermission("admin")) {
+      localStorage.setItem("hasTakenVendorTour", true);
+      startTour();
+    }
   }
 
   renderProductGridItems = (products) => {

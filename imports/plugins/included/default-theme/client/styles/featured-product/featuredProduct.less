@@ -4,9 +4,9 @@
 }
 
 .featured-slide {
-  margin-right: 80px;
-  margin-left: 80px;
-  background-color: #979595;
+  margin-right: 5%;
+  margin-left: 5%;
+  background-color: @featured-bg-color;
 }
 
 .hovereffect {
@@ -15,7 +15,7 @@
   overflow:hidden;
   position:relative;
   text-align:center;
-  cursor:default;
+  cursor: pointer;
   }
 
 .hovereffect img {
@@ -47,29 +47,30 @@ transform:scale(1.2);
 }
 
 .col-background {
-  background-color: white;
+  background-color: @featured-bg-col-color;
   padding: 10px;
   border-radius: 10px;
-  margin-left: 20px;
-  width: 250px;
 }
 
 .feature-size {
-  width: 1100px;
   margin-top: 20px;
   margin-bottom: 20px;
-  margin-left: 90px;
-  margin-right: 90px;
+  padding-left: 4%;
+  padding-right: 4%;
 }
 
 .feature-hov {
-  width: 230px;
+  width: 100%;
   height: 230px;
+}
+
+.item-content {
+  margin: 5px;
 }
 
 h4 {
   font-family: inherit;
-  color: #fe7922;
+  color: @featured-product-color;
   font-weight: 600;
 }
 
@@ -80,160 +81,50 @@ h2 {
 }
 
 .arrow {
-  margin-top: 170px !important;
+  margin-top: 100% !important;
 }
 
 
-@media(max-width: 1024px) {
-
-  .featured-slide {
-    margin-right: 8%;
-    margin-left: 8%;
-    background-color: #979595;
+@media (max-width: 768px){
+  .tcb-product-slider .container {
+    width: 100%;
   }
-
-  .hovereffect {
-    width:80px;
-    height:80px;
-    overflow:hidden;
-    position:relative;
-    text-align:center;
-    cursor:default;
-  }
-
-  .hovereffect img {
-    display:block;
-    position:relative;
-    -webkit-transition:all .4s linear;
-    transition:all .4s linear;
-  }
-
-  .hovereffect:hover img {
-  -ms-transform:scale(1.2);
-  -webkit-transform:scale(1.2);
-  transform:scale(1.2);
-  }
-
-  .title {
-    font-size: 20px;
-  }
-
-  .ellipsis {
-    overflow:hidden;
-    white-space:nowrap;
-    text-overflow:ellipsis;
-  }
-
-  .next-row {
-    margin-top: 30px;
-  }
-
-  .col-background {
-    background-color: white;
-    padding: 10px;
-    border-radius: 10px;
-    margin-left: 20px;
-    width: 180px;
-  }
-
   .feature-size {
-    width: 1100px;
     margin-top: 20px;
     margin-bottom: 20px;
-    margin-left: 18px;
-    margin-right: 18px;
+    padding-left: 7%;
+    padding-right: 7%;
   }
 
   .feature-hov {
-    width: 160px;
-    height: 160px;
+    width: 100%;
+    height: 100px !important;
   }
 
-  h4 {
-    font-family: inherit;
-    color: #fe7922;
-    font-weight: 600;
-  }
-
-  .arrow {
-    margin-top: 130px !important;
+  .title {
+    font-size: 12px;
   }
 
 }
 
-@media(max-width: 1000px) {
-
-    .featured-slide {
-      margin-right: 8%;
-      margin-left: 8%;
-      background-color: #979595;
-    }
-
-    .hovereffect {
-      width:80px;
-      height:80px;
-      overflow:hidden;
-      position:relative;
-      text-align:center;
-      cursor:default;
-    }
-
-    .hovereffect img {
-    display:block;
-    position:relative;
-    -webkit-transition:all .4s linear;
-    transition:all .4s linear;
-    }
-
-    .hovereffect:hover img {
-    -ms-transform:scale(1.2);
-    -webkit-transform:scale(1.2);
-    transform:scale(1.2);
-    }
-
-    .title {
-      font-size: 20px;
-    }
-
-    .ellipsis {
-      overflow:hidden;
-      white-space:nowrap;
-      text-overflow:ellipsis;
-    }
-
-    .next-row {
-      margin-top: 30px;
-    }
-
-    .col-background {
-      background-color: white;
-      padding: 10px;
-      border-radius: 10px;
-      margin-left: 20px;
-      width: 130px;
-    }
-
-    .feature-size {
-      width: 1100px;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      margin-left: 18px;
-      margin-right: 18px;
-    }
-
-    .feature-hov {
-      width: 110px;
-      height: 110px;
-    }
-
-    h4 {
-      font-family: inherit;
-      color: #fe7922;
-      font-weight: 600;
-    }
-
-    .arrow {
-      margin-top: 100px !important;
-    }
-
+@media (max-width: 1040px){
+  .tcb-product-slider .container {
+    width: 100%;
   }
+  .feature-size {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 7%;
+    padding-right: 7%;
+  }
+
+  .feature-hov {
+    width: 100%;
+    height: 150px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+}
