@@ -1,0 +1,63 @@
+.review{
+  padding: 1em;
+  display: flex;
+  flex-direction: row;
+}
+.center{
+  margin: 0 auto;
+}
+.review-content {
+  flex: 1;
+  display: flex;
+  padding: 0 .5em;
+  flex-direction: column;
+  font-size: 1.3rem;
+}
+.review-content h6{
+ margin: 0 !important;
+ font-weight: bold;
+ font-size: 1.2rem;
+}
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+.review-list{
+  padding: 0;
+  margin: 0 0 50px 0;
+}
+.review-section {
+  width: 50%;
+  padding: 12px;
+}
+.review-icon-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+.review-icon-wrapper i {
+  margin: 15px 5px;
+  cursor: pointer;
+  color: rgba(0,0,0,.6);
+}
+.review-label{
+  color: rgba(0,0,0,.6);
+  margin-left: .3em;
+}
+.review-form{
+  margin: .5em 0 25px 0;
+}
+.rui.btn-default.flat.close-btn{
+  color: @white;
+  background-color: @rui-danger;
+  margin-left: .2em;
+}
+@media (max-width: 991px) {
+  .review-section {
+    width: 100%;
+  }
+}
