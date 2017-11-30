@@ -1,0 +1,16 @@
+<template name="orophinTemplate">
+  <main role="main" id="main">
+    {{#if hasAdminAccess}}
+    <div>
+      {{> products}}
+    </div>
+    {{else}}
+    <div>
+      {{> advertiseCarousel}}
+      {{> products}}
+      {{> featuredProduct}}
+      {{> footer}}
+    </div>
+    {{/if}}
+  </main>
+</template>
