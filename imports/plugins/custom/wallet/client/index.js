@@ -1,0 +1,1 @@
+import "./dashboard/templates/wallet";

@@ -1,0 +1,27 @@
+import { Reaction } from "/server/api";
+
+Reaction.registerPackage({
+  label: "Wallet",
+  name: "wallet",
+  icon: "fa fa-google-wallet",
+  autoEnable: true,
+  settings: {
+    enabled: true
+  },
+  registry: [
+    {
+      template: "paystackPaymentForm",
+      provides: ["paymentMethod"]
+    },
+    {
+      route: "/account/wallet",
+      icon: "fa fa-google-wallet",
+      provides: ["shortcut"],
+      template: "walletDashboard",
+      label: "Wallet",
+      name: "wallet",
+      workflow: "coreWorkFlow"
+    }
+  ],
+  layout: [] // Array of layout objects - optional
+});
