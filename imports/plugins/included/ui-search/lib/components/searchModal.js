@@ -39,7 +39,7 @@ class SearchModal extends Component {
 
   handleProductSort = (id) => {
     const selected = document.getElementById(id);
-    const unsorted = [ ...this.props.products ];
+    const unsorted = [...this.props.products];
     let sortedProducts = [];
     if (selected.value === "highest-price") {
       sortedProducts = _.orderBy(unsorted, ["price.max"], ["desc"]);
@@ -52,11 +52,10 @@ class SearchModal extends Component {
     }
   }
 
-  handleFilterProductByVendor = (event)  => {
+  handleFilterProductByVendor = (event) => {
     let filtered = [];
     const unfiltered = [...this.props.products];
     if (event.target.value === "all") {
-      console.log(this.props.products);
       this.setState({ products: this.props.products });
     }
     if (event.target.value && event.target.value !== "all") {
@@ -93,7 +92,7 @@ class SearchModal extends Component {
 
   handleFilterByPrice = (event) => {
     event.preventDefault();
-    const filtered = this.props.products.filter(product => {
+    const filtered = this.props.products.filter((product) => {
       return product.price.max >= this.state.lowPriceFilter && product.price.max <= this.state.highPriceFilter;
     });
     this.setState({ products: filtered });
@@ -101,7 +100,7 @@ class SearchModal extends Component {
 
   renderSortByAlphabet() {
     return (
-      <div className=" select-input col-md-3">
+      <div className="select-input col-md-3">
         <p>Sort By Name</p>
         <div className="rui select">
 
@@ -118,12 +117,12 @@ class SearchModal extends Component {
   renderFilterByPrice() {
     return (
       <div className="price-input col-md-3">
-        <span>Price Filter:&nbsp;</span>
+        <span> Price Filter:&nbsp; </span>
         <form className="form-input">
-          <input type="number" name="lowest" onChange={this.handlePriceChange} className="input-field"/>
-          <span className="input-text">to</span>
-          <input type="number" name="highest" onChange={this.handlePriceChange} className="input-field"/>
-          <button  onClick={this.handleFilterByPrice} >filter</button>
+          <input type="number" name="lowest" onChange={this.handlePriceChange} className="input-field" />
+          <span className="input-text"> to </span>
+          <input type="number" name="highest" onChange={this.handlePriceChange} className="input-field" />
+          <button onClick={this.handleFilterByPrice} >filter</button>
         </form>
       </div>
     );
