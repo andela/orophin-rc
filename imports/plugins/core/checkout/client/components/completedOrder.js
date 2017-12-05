@@ -123,7 +123,7 @@ const CompletedOrder = ({ order, orderId, shops, orderSummary, paymentMethods, h
 
 CompletedOrder.propTypes = {
   handleDisplayMedia: PropTypes.func,
-  hasDigitalProduct: PropTypes.bool,
+  hasDigitalProduct: PropTypes.bool.isRequired,
   isProfilePage: PropTypes.bool,
   order: PropTypes.object,
   orderId: PropTypes.string,
