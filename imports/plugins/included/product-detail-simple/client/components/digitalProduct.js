@@ -10,7 +10,7 @@ firebase.initializeApp(config);
 class DigitalProduct extends Component {
   static propTypes = {
     hasAdminPermission: PropTypes.bool,
-    onProductFieldChange: PropTypes.function,
+    onProductFieldChange: PropTypes.func,
     product: PropTypes.object
   };
 
