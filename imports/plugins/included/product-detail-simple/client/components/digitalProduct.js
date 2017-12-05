@@ -9,9 +9,9 @@ firebase.initializeApp(config);
 
 class DigitalProduct extends Component {
   static propTypes = {
-    hasAdminPermission: PropTypes.bool.isRequired,
-    onProductFieldChange: PropTypes.function.isRequired,
-    product: PropTypes.object.isRequired
+    hasAdminPermission: PropTypes.bool,
+    onProductFieldChange: PropTypes.function,
+    product: PropTypes.object
   };
 
   constructor(props) {
@@ -156,6 +156,11 @@ class DigitalProduct extends Component {
     );
   }
 }
+
+DigitalProduct.defaultProps = {
+  hasAdminPermission: false,
+  product: {}
+};
 
 registerComponent("DigitalProduct", DigitalProduct);
 

@@ -130,9 +130,12 @@ const CompletedOrder = ({
   );
 };
 
+CompletedOrder.defaultProps = {
+  hasDigitalProduct: false
+};
 CompletedOrder.propTypes = {
   handleDisplayMedia: PropTypes.func,
-  hasDigitalProduct: PropTypes.bool.isRequired,
+  hasDigitalProduct: PropTypes.bool,
   isProfilePage: PropTypes.bool,
   order: PropTypes.object,
   orderId: PropTypes.string,
