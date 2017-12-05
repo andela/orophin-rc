@@ -9,9 +9,9 @@ firebase.initializeApp(config);
 
 class DigitalProduct extends Component {
   static propTypes = {
-    hasAdminPermission: PropTypes.bool,
-    onProductFieldChange: PropTypes.function,
-    product: PropTypes.object
+    hasAdminPermission: PropTypes.bool.isRequired,
+    onProductFieldChange: PropTypes.function.isRequired,
+    product: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -20,7 +20,6 @@ class DigitalProduct extends Component {
       isDigital: this.props.product.isDigital,
       downloadUrl: this.props.product.downloadLink,
       newUrl: "",
-      urlFile: "",
       progressBar: false,
       progressLevel: 0,
       uploadStatus: ""
@@ -62,7 +61,7 @@ class DigitalProduct extends Component {
         Alerts.toast("Error in uploading file", "error");
       }
     }, () => {
-      const downloadURL = uploadTask.snapshot.downloadURL;
+      const { downloadURL } = uploadTask.snapshot;
       Alerts.toast("Upload Completed", "success");
       this.setState({ newUrl: downloadURL, uploadStatus: "Uploaded" });
       this.props.onProductFieldChange(this.props.product._id, "downloadLink", this.state.newUrl);
@@ -91,52 +90,59 @@ class DigitalProduct extends Component {
     const { EditButton } = Components;
     return (
       <div>
-        {(this.props.hasAdminPermission) ?
-          <div>
+        {
+          (this.props.hasAdminPermission) ?
             <div>
-              <input type="checkbox" className="digital-check"
-                defaultChecked={this.state.isDigital}
-                onChange={this.selectDigital}
-              />
-              <label className="digital">Digital Product</label>
-            </div>
-            <div>
-              {(this.state.isDigital && this.state.downloadUrl === "") ?
-                < div className=" col-sm-11 input-group downloadLink">
-                  <input type="file" className="form-control choose" id="file"
-                    onChange={this.fileUpload}
-                  />
-                </div> : <div />}
-              {this.state.progressBar &&
-                <div className="progress">
-                  <div
-                    className="progress-bar progress-bar-striped active"
-                    role="progressbar"
-                    style={{ width: `${this.state.progressLevel}%` }}
-                  >
-                    {this.state.uploadStatus}</div>
-                </div>
-              }
-              {(this.state.isDigital && this.state.downloadUrl !== "") ?
-                <div className="row downloadLink">
-                  <div className="col-sm-11 digital-input">
-                    <input type="text" disabled
-                      placeholder={this.state.downloadUrl}
-                    />
+              <div>
+                <input type="checkbox" className="digital-check"
+                  defaultChecked={this.state.isDigital}
+                  onChange={this.selectDigital}
+                />
+                <label className="digital">Digital Product</label>
+              </div>
+              <div>
+                {
+                  (this.state.isDigital && this.state.downloadUrl === "") ?
+                    <div className=" col-sm-11 input-group downloadLink">
+                      <input type="file" className="form-control choose" id="file"
+                        onChange={this.fileUpload}
+                      />
+                    </div> : <div />
+                }
+                {
+                  this.state.progressBar &&
+                  <div className="progress">
+                    <div
+                      className="progress-bar progress-bar-striped active"
+                      role="progressbar"
+                      style={{ width: `${this.state.progressLevel}%` }}
+                    >
+                      {this.state.uploadStatus}
+                    </div>
                   </div>
-                  <div className="col-sm-1">
-                    <EditButton
-                      onClick={this.editLink}
-                    />
-                  </div>
-                </div> : <div />
-              }
+                }
+                {
+                  (this.state.isDigital && this.state.downloadUrl !== "") ?
+                    <div className="row downloadLink">
+                      <div className="col-sm-11 digital-input">
+                        <input type="text" disabled
+                          placeholder={this.state.downloadUrl}
+                        />
+                      </div>
+                      <div className="col-sm-1">
+                        <EditButton
+                          onClick={this.editLink}
+                        />
+                      </div>
+                    </div> : <div />
+                }
+              </div>
             </div>
-          </div>
-          : <div />
+            : <div />
         }
-        {(this.state.isDigital && !this.props.hasAdminPermission) ?
-          <div><h4>This is a Digital Product</h4></div> : <div />
+        {
+          (this.state.isDigital && !this.props.hasAdminPermission) ?
+            <div><h4>This is a Digital Product</h4></div> : <div />
         }
         <br />
       </div>
