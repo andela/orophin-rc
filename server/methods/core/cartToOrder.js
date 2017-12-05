@@ -166,8 +166,29 @@ export function copyCartToOrder(cartId) {
   });
 
   order.billing[0].currency.exchangeRate = exchangeRate;
-  order.workflow.status = "new";
-  order.workflow.workflow = ["coreOrderWorkflow/created"];
+
+  let hasPhysical = false;
+  order.items.forEach((item) => {
+    if (item.isDigital === false) {
+      hasPhysical = true;
+    } else {
+      item.workflow.workflow = ["coreOrderItemWorkflow/completed"];
+      item.workflow.status = "coreOrderItemWorkflow/completed";
+    }
+  });
+
+  if (hasPhysical === false) {
+    // set new workflow status
+    order.workflow.status = "coreOrderWorkflow/completed";
+    order.workflow.workflow = [
+      "coreOrderWorkflow/created",
+      "coreOrderWorkflow/processing",
+      "coreOrderWorkflow/completed"];
+  } else {
+    // set new workflow status
+    order.workflow.status = "new";
+    order.workflow.workflow = ["coreOrderWorkflow/created"];
+  }
 
   // insert new reaction order
   const orderId = Collections.Orders.insert(order);

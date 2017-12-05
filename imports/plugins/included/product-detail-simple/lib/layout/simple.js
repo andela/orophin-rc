@@ -195,6 +195,11 @@ export default function blocks() {
           }
         },
 
+        // Digital Product Field
+        {
+          component: "DigitalProduct"
+        },
+
         // Add to cart button
         {
           component: "AddToCartButton",

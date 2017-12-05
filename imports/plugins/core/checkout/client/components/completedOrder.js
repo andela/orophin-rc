@@ -18,7 +18,7 @@ import AddEmail from "./addEmail";
  * @property {Booleam} isProfilePage - A boolean value that checks if current page is user profile page
  * @return {Node} React node containing the top-level component for displaying the completed order/receipt page
  */
-const CompletedOrder = ({ order, orderId, shops, orderSummary, paymentMethods, handleDisplayMedia, isProfilePage }) => {
+const CompletedOrder = ({ order, orderId, shops, orderSummary, paymentMethods, handleDisplayMedia, isProfilePage, hasDigitalProduct }) => {
   if (!order) {
     return (
       <Components.NotFound
@@ -41,6 +41,15 @@ const CompletedOrder = ({ order, orderId, shops, orderSummary, paymentMethods, h
         <p><strong>Order ID </strong>{orderId}</p>
         {/* show a different message depending on whether we have an email or not */}
         <AddEmail order={order} orderEmail={order.email} />
+        {
+          hasDigitalProduct ?
+            <div>
+              <p>
+            Please find your <b>download link</b> below in the order page
+              </p>
+            </div> : ""
+        }
+
         {/* This is the left side / main content*/}
       </div>
     );
@@ -100,7 +109,11 @@ const CompletedOrder = ({ order, orderId, shops, orderSummary, paymentMethods, h
             })}
           </div>
         </div>
-        <CompletedOrderSummary shops={shops} orderSummary={orderSummary} isProfilePage={isProfilePage} />
+        <CompletedOrderSummary
+          shops={shops}
+          orderSummary={orderSummary}
+          isProfilePage={isProfilePage}
+        />
         {/* This is the right side / side content */}
       </div>
 
@@ -110,6 +123,7 @@ const CompletedOrder = ({ order, orderId, shops, orderSummary, paymentMethods, h
 
 CompletedOrder.propTypes = {
   handleDisplayMedia: PropTypes.func,
+  hasDigitalProduct: PropTypes.bool,
   isProfilePage: PropTypes.bool,
   order: PropTypes.object,
   orderId: PropTypes.string,
