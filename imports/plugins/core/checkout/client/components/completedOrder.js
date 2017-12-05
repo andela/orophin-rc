@@ -18,7 +18,16 @@ import AddEmail from "./addEmail";
  * @property {Booleam} isProfilePage - A boolean value that checks if current page is user profile page
  * @return {Node} React node containing the top-level component for displaying the completed order/receipt page
  */
-const CompletedOrder = ({ order, orderId, shops, orderSummary, paymentMethods, handleDisplayMedia, isProfilePage, hasDigitalProduct }) => {
+const CompletedOrder = ({
+  order,
+  orderId,
+  shops,
+  orderSummary,
+  paymentMethods,
+  handleDisplayMedia,
+  isProfilePage,
+  hasDigitalProduct
+}) => {
   if (!order) {
     return (
       <Components.NotFound

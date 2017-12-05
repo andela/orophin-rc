@@ -94,7 +94,9 @@ class DigitalProduct extends Component {
           this.props.hasAdminPermission ?
             <div>
               <div>
-                <input type="checkbox" className="digital-check"
+                <input
+                  type="checkbox"
+                  className="digital-check"
                   defaultChecked={this.state.isDigital}
                   onChange={this.selectDigital}
                 />
@@ -104,7 +106,10 @@ class DigitalProduct extends Component {
                 {
                   this.state.isDigital && this.state.downloadUrl === "" ?
                     <div className=" col-sm-11 input-group downloadLink">
-                      <input type="file" className="form-control choose" id="file"
+                      <input
+                        type="file"
+                        className="form-control choose"
+                        id="file"
                         onChange={this.fileUpload}
                       />
                     </div> : <div />
@@ -125,7 +130,9 @@ class DigitalProduct extends Component {
                   this.state.isDigital && this.state.downloadUrl !== "" ?
                     <div className="row downloadLink">
                       <div className="col-sm-11 digital-input">
-                        <input type="text" disabled
+                        <input
+                          type="text"
+                          disabled
                           placeholder={this.state.downloadUrl}
                         />
                       </div>
