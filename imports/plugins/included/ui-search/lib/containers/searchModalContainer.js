@@ -72,6 +72,8 @@ const wrapComponent = (Comp) => (
 
     handleChildUnmount = () =>  {
       this.setState({ renderChild: false });
+      const body = document.getElementsByTagName("body")[0];
+      body.style.overflow = "visible";
     }
 
     render() {

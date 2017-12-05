@@ -21,12 +21,14 @@ class SearchModal extends Component {
     unmountMe: PropTypes.func,
     value: PropTypes.string
   }
-
-  state = {
-    products: this.props.products,
-    lowPriceFilter: 0,
-    highPriceFilter: 0
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      products: this.props.products,
+      lowPriceFilter: 0,
+      highPriceFilter: 0
+    };
+  }
 
   componentDidMount() {
     this.setState({ products: this.props.products });
@@ -92,9 +94,7 @@ class SearchModal extends Component {
 
   handleFilterByPrice = (event) => {
     event.preventDefault();
-    const filtered = this.props.products.filter((product) => {
-      return product.price.max >= this.state.lowPriceFilter && product.price.max <= this.state.highPriceFilter;
-    });
+    const filtered = this.props.products.filter((product) => product.price.max >= this.state.lowPriceFilter && product.price.max <= this.state.highPriceFilter);
     this.setState({ products: filtered });
   }
 
@@ -122,7 +122,7 @@ class SearchModal extends Component {
           <input type="number" name="lowest" onChange={this.handlePriceChange} className="input-field" />
           <span className="input-text"> to </span>
           <input type="number" name="highest" onChange={this.handlePriceChange} className="input-field" />
-          <button onClick={this.handleFilterByPrice} >filter</button>
+          <button className="search-filter-btn" onClick={this.handleFilterByPrice} >Filter</button>
         </form>
       </div>
     );
@@ -253,7 +253,7 @@ class SearchModal extends Component {
         <div className="rui search-modal-results-container">
           {this.props.products.length > 0 &&
             <ProductGridContainer
-              products={this.state.products || this.props.products}
+              products={this.state.products.length > 0 ? this.state.products : this.props.products}
               unmountMe={this.props.unmountMe}
               isSearch={true}
             />
