@@ -1,9 +1,9 @@
 import React, { Component } from "react";
+import { setTimeout } from "timers";
 import PropTypes from "prop-types";
 import firebase from "firebase";
 import { registerComponent, Components } from "@reactioncommerce/reaction-components";
 import config from "../firebase/config";
-import { setTimeout } from "timers";
 
 firebase.initializeApp(config);
 
@@ -91,7 +91,7 @@ class DigitalProduct extends Component {
     return (
       <div>
         {
-          (this.props.hasAdminPermission) ?
+          this.props.hasAdminPermission ?
             <div>
               <div>
                 <input type="checkbox" className="digital-check"
@@ -102,7 +102,7 @@ class DigitalProduct extends Component {
               </div>
               <div>
                 {
-                  (this.state.isDigital && this.state.downloadUrl === "") ?
+                  this.state.isDigital && this.state.downloadUrl === "" ?
                     <div className=" col-sm-11 input-group downloadLink">
                       <input type="file" className="form-control choose" id="file"
                         onChange={this.fileUpload}
@@ -122,7 +122,7 @@ class DigitalProduct extends Component {
                   </div>
                 }
                 {
-                  (this.state.isDigital && this.state.downloadUrl !== "") ?
+                  this.state.isDigital && this.state.downloadUrl !== "" ?
                     <div className="row downloadLink">
                       <div className="col-sm-11 digital-input">
                         <input type="text" disabled
@@ -141,7 +141,7 @@ class DigitalProduct extends Component {
             : <div />
         }
         {
-          (this.state.isDigital && !this.props.hasAdminPermission) ?
+          this.state.isDigital && !this.props.hasAdminPermission ?
             <div><h4>This is a Digital Product</h4></div> : <div />
         }
         <br />

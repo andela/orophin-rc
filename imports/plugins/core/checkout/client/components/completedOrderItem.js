@@ -25,7 +25,7 @@ const CompletedOrderItem = ({ item, handleDisplayMedia }) => {
             {item.product.title}
             <div className="title-button">
               <p>{item.variants.title}</p>
-              <a  href={item.downloadLink} download={item.downloadLink}>
+              <a href={item.downloadLink} download={item.downloadLink}>
                 <h6 className="download-link"> Click to download... </h6>
               </a>
             </div>
