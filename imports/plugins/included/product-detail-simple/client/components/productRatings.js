@@ -113,7 +113,18 @@ class ProductRatingsComponent extends Component {
         {
           !isGuestUser() &&
           <div>{this.isRated()}</div>
+
         }
+
+        <div>
+          <iframe
+            title="embeddedFrame" src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Freactioncommerce%2F&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=849639745183286" width="500" height="640"
+            style={{
+              padding: "15px 70px", border: "none", overflow: "hidden", justifyContent: "center"
+            }}
+            scrolling="no" frameBorder="0" allowTransparency="true"
+          />
+        </div>
       </div>
     );
   }
