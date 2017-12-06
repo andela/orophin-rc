@@ -9,7 +9,7 @@ firebase.initializeApp(config);
 
 class DigitalProduct extends Component {
   static propTypes = {
-    hasAdminPermission: PropTypes.bool,
+    hasAdminPermission: PropTypes.bool.isRequired,
     onProductFieldChange: PropTypes.func,
     product: PropTypes.object
   };
@@ -105,7 +105,7 @@ class DigitalProduct extends Component {
               <div>
                 {
                   this.state.isDigital && this.state.downloadUrl === "" ?
-                    <div className=" col-sm-11 input-group downloadLink">
+                    <div className=" col-sm-12 input-group downloadLink">
                       <input
                         type="file"
                         className="form-control choose"
@@ -158,7 +158,6 @@ class DigitalProduct extends Component {
 }
 
 DigitalProduct.defaultProps = {
-  hasAdminPermission: false,
   product: {}
 };
 
