@@ -11,7 +11,8 @@ import {
   ProductNotFound,
   ProductDetail,
   ProductRatingsComponent,
-  FeedbackBadge
+  FeedbackBadge,
+  Footer
 } from "./components";
 
 import {
@@ -46,4 +47,5 @@ registerComponent("ProductNotFound", ProductNotFound);
 registerComponent("Reviews", ProductReviewsComponent);
 registerComponent("Ratings", ProductRatingsComponent);
 registerComponent("FeedbackBadge", FeedbackBadge);
+registerComponent("Footer", Footer);
 
