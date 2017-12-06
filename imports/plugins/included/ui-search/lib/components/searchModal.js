@@ -26,7 +26,8 @@ class SearchModal extends Component {
     this.state = {
       products: this.props.products,
       lowPriceFilter: 0,
-      highPriceFilter: 0
+      highPriceFilter: 0,
+      SortOrFilterEmpty: false
     };
   }
 
@@ -95,6 +96,9 @@ class SearchModal extends Component {
   handleFilterByPrice = (event) => {
     event.preventDefault();
     const filtered = this.props.products.filter((product) => product.price.max >= this.state.lowPriceFilter && product.price.max <= this.state.highPriceFilter);
+    if (filtered.length < 1) {
+      this.setState({ SortOrFilterEmpty: true });
+    }
     this.setState({ products: filtered });
   }
 
@@ -253,7 +257,7 @@ class SearchModal extends Component {
         <div className="rui search-modal-results-container">
           {this.props.products.length > 0 &&
             <ProductGridContainer
-              products={this.state.products.length > 0 ? this.state.products : this.props.products}
+              products={ this.state.SortOrFilterEmpty === true ||  this.state.products.length > 0  ? this.state.products : this.props.products}
               unmountMe={this.props.unmountMe}
               isSearch={true}
             />
