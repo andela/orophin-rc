@@ -48,6 +48,7 @@ ProductDetail.propTypes = {
   onViewContextChange: PropTypes.func,
   priceRange: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   product: PropTypes.object,
+  review: PropTypes.arrayOf(PropTypes.object),
   socialComponent: PropTypes.node,
   tags: PropTypes.arrayOf(PropTypes.object),
   topVariantComponent: PropTypes.node,

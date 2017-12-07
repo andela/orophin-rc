@@ -9,7 +9,9 @@ import {
   PriceRange,
   AddToCartButton,
   ProductNotFound,
-  ProductDetail
+  ProductDetail,
+  ProductRatingsComponent,
+  FeedbackBadge
 } from "./components";
 
 import {
@@ -18,7 +20,8 @@ import {
 
 import {
   SocialContainer,
-  VariantListContainer
+  VariantListContainer,
+  ProductReviewsComponent
 } from "./containers";
 
 import {
@@ -40,3 +43,7 @@ registerComponent("VariantListContainer", VariantListContainer);
 registerComponent("AddToCartButton", AddToCartButton);
 registerComponent("Divider", Divider);
 registerComponent("ProductNotFound", ProductNotFound);
+registerComponent("Reviews", ProductReviewsComponent);
+registerComponent("Ratings", ProductRatingsComponent);
+registerComponent("FeedbackBadge", FeedbackBadge);
+

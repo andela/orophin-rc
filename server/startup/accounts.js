@@ -175,6 +175,13 @@ export default function () {
         Meteor.call("accounts/sendWelcomeEmail", shopId, user._id);
       }
 
+      if (user) {
+        if (user.emails.length !== 0) {
+          Meteor.call("wallet/create-user-wallet", user.emails[0].address);
+        }
+      }
+
+
       // assign default user roles
       user.roles = roles;
 

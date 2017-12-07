@@ -46,10 +46,22 @@ export default function blocks() {
         }
       ]
     },
+    // Review Field
+    {
+      type: "block",
+      columns: 12,
+      element: "section",
+      className: "feedback-badge-wrapper",
+      children: [
+        {
+          component: "FeedbackBadge"
+        }
+      ]
+    },
 
     // Media block
     // Contains
-    // - Medai Gallery
+    // - Media Gallery
     // - Tags
     // - Details
     {
@@ -74,14 +86,16 @@ export default function blocks() {
         {
           component: "ProductTags"
         },
-
         // Metadata
         {
           component: "ProductMetadata"
+        },
+        // Review Field
+        {
+          component: "Review"
         }
       ]
     },
-
     // Variant block
     {
       type: "block",
@@ -189,8 +203,23 @@ export default function blocks() {
               paddingTop: 20
             }
           }
+        },
+        // Ratings Field
+        {
+          component: "ProductRatingsComponent"
         }
 
+      ]
+    },
+    // Review Field
+    {
+      type: "block",
+      columns: 12,
+      element: "section",
+      children: [
+        {
+          component: "ProductReviewsComponent"
+        }
       ]
     }
   ];
