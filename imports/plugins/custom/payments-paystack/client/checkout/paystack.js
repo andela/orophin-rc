@@ -20,7 +20,6 @@ function uiEnd(template, buttonText) {
 }
 
 function paymentAlert(template, errorMessage) {
-  // return $(".alert").removeClass("hidden").text(errorMessage);
   $("#paystackPaymentForm").find(".alert").removeClass("hidden").text(
     errorMessage || "An error occurred. Kindldy check the details you entered");
 }

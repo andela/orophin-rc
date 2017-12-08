@@ -44,7 +44,7 @@ class WalletAction extends Component {
 
             return;
           }
-          Alerts.toast(fundWalletError.message, fundWalletError.type);
+          Alerts.toast(fundWalletError.message, "error");
 
           this.resetInputs();
 
@@ -71,7 +71,7 @@ class WalletAction extends Component {
         })
         .catch((transferError) => {
           if (typeof transferError === "object") {
-            Alerts.toast(transferError.message, transferError.type);
+            Alerts.toast(transferError.message, "error");
           }
 
           this.resetInputs();
@@ -81,9 +81,6 @@ class WalletAction extends Component {
     }
   }
 
-  fundWallet = () => {
-
-  }
   render() {
     const { buttonText, headerTitle, actionType } = this.props;
     return (

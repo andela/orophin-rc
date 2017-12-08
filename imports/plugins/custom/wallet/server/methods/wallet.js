@@ -11,6 +11,7 @@ Meteor.methods({
    */
   "wallet/create-user-wallet": function (ownerEmail) {
     check(ownerEmail, String);
+
     Wallets.insert({ ownerEmail });
   },
 
@@ -31,7 +32,12 @@ Meteor.methods({
 
   "wallet/update-balance": async function (transaction) {
     check(transaction, Object);
-    const { amount, to, from, transactionType } = transaction;
+    const {
+      amount,
+      to,
+      from,
+      transactionType
+    } = transaction;
 
     const updateBalance = (currentBalance, updateAmount, ownerEmail) => {
       Wallets.update({ ownerEmail }, {

@@ -14,10 +14,7 @@ const handlers = {
   fundWallet: function fundWallet(amount) {
     return new Promise((resolve, reject) => {
       if (amount <= 0) {
-        return reject({
-          message: "invalid amount, please try again",
-          type: "error"
-        });
+        return reject(new Error("invalid amount, please try again"));
       }
 
       Meteor.subscribe("Packages", Reaction.getShopId());
@@ -35,10 +32,7 @@ const handlers = {
               const { reference } = response;
               Paystack.verify(reference, secretKey, (paystackVerifyError, res) => {
                 if (paystackVerifyError) {
-                  reject({
-                    message: paystackVerifyError.message,
-                    type: "error"
-                  });
+                  reject(paystackVerifyError);
                 } else {
                   Meteor.call("wallet/get-user-walletId", email, (getWalletIdError, walletId) => {
                     const transaction = {
@@ -61,18 +55,12 @@ const handlers = {
               });
             },
             onClose: function () {
-              reject({
-                message: "paystack-popup-close",
-                type: "warning"
-              });
+              reject(new Error("paystack-popup-close"));
             }
           };
           PaystackPop.setup(payload).openIframe();
         } else {
-          reject({
-            message: getPublicKeyError,
-            type: "error"
-          });
+          reject(getPublicKeyError);
         }
       });
     });
@@ -87,32 +75,20 @@ const handlers = {
 
     return new Promise((resolve, reject) => {
       if (receiverEmail === senderEmail) {
-        return reject({
-          message: "You can't transfer to yourself",
-          type: "errror"
-        });
+        return reject(new Error("You can't transfer to yourself"));
       }
 
       if (amount <= 0) {
-        return reject({
-          message: "invalid amount, please try again",
-          type: "error"
-        });
+        return reject(new Error("invalid amount, please try again"));
       }
 
       if (amount > senderBalance) {
-        return reject({
-          message: "You dont have enough for this transfer, please fund your wallet",
-          type: "error"
-        });
+        return reject(new Error("You dont have enough for this transfer, please fund your wallet"));
       }
 
       Meteor.call("wallet/get-user-walletId", receiverEmail, (getWalletIdError, receiverWalletId) => {
         if (getWalletIdError) {
-          return reject({
-            message: getWalletIdError.message,
-            type: "error"
-          });
+          return reject(getWalletIdError);
         }
         const senderTransaction = {
           amount: parseInt(amount, 10),
@@ -135,10 +111,7 @@ const handlers = {
           Meteor.call("wallet/insert-transaction", transaction);
         });
 
-        resolve({
-          message: `Transfer to ${receiverEmail} successful`,
-          type: "success"
-        });
+        resolve(new Error(`Transfer to ${receiverEmail} successful`));
       });
     });
   },
@@ -149,9 +122,9 @@ const handlers = {
 
     const pagesCount = Math.ceil(walletHistoryCount / limit);
 
-    const walletHistory =  WalletHistories.find({}, {
+    const walletHistory = WalletHistories.find({}, {
       sort: { createdAt: -1 },
-      limit: limit,
+      limit,
       skip: offset
     }).fetch();
 
@@ -169,7 +142,7 @@ function composer(props, onData) {
 
     const { walletHistory, pagesCount } = handlers.fetchWalletHistory();
 
-    onData(null, { wallet,  walletHistory, pagesCount });
+    onData(null, { wallet, walletHistory, pagesCount });
   }
 }
 
