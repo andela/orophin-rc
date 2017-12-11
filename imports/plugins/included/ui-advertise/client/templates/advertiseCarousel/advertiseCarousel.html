@@ -1,29 +1,6 @@
 <template name="advertiseCarousel">
   <div class="row landing-carousel">
-    <div class="col-sm-3 list-group hidden-xs">
-      <a href="#" class="list-group-item">
-        <img class="icon" src="/resources/goceries.png" alt="icon" width="15px">GROCERIES</a>
-      <a href="#" class="list-group-item">
-        <img class="icon" src="/resources/fashion.png" alt="icon" width="15px">FASHION</a>
-      <a href="#" class="list-group-item">
-        <img class="icon" src="/resources/phone-icon.jpg" alt="icon" width="15px">PHONE & TABLETS</a>
-      <a href="#" class="list-group-item">
-        <img class="icon" src="/resources/home.png" alt="icon" width="15px">HOME & OFFICE</a>
-      <a href="#" class="list-group-item">
-        <img class="icon" src="/resources/computing.png" alt="icon" width="15px">COMPUTING</a>
-      <a href="#" class="list-group-item">
-        <img class="icon" src="/resources/tv.png" alt="icon" width="15px">TV & ELECTRONICS</a>
-      <a href="#" class="list-group-item">
-        <img class="icon" src="/resources/baby.png" alt="icon" width="15px">BABY, KIDS & TOYS</a>
-      <a href="#" class="list-group-item">
-        <img class="icon" src="/resources/health.png" alt="icon" width="15px">HEALTH & BEAUTY</a>
-      <a href="#" class="list-group-item">
-        <img class="icon" src="/resources/watch-3.png" alt="icon" width="15px">WATCHES & SUNGLASSES</a>
-      <a href="#" class="list-group-item">
-        <img class="icon" src="/resources/game.png" alt="icon" width="15px">GAME & CONSOLES</a>
-      <a href="#" class="list-group-item">
-        <img class="icon" src="/resources/other.png" alt="icon" width="15px">OTHER CATEGORIES</a>
-    </div>
+    {{> categories }}
     <div id="myCarousel" class="col-sm-9 carousel slide advert-carousel" data-ride="carousel">
       <!-- Indicators -->
       <ol class="carousel-indicators">
