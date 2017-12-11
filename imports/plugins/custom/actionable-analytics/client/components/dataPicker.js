@@ -12,8 +12,14 @@ class DatePicker extends Component {
     secondDate: this.props.initialEndDate
   }
 
-  onDateChange = (date) => {
-    this.setState({ date });
+  onfirstDateChange = (date) => {
+    this.setState({ firstDate: date });
+    this.props.getFirstDate(date);
+  }
+
+  onsecondDateChange = (date) => {
+    this.setState({ secondDate: date });
+    this.props.getSecondDate(date);
   }
 
   onFirstDatePickerFocus = ({ focused }) => {
@@ -25,29 +31,32 @@ class DatePicker extends Component {
 
   render() {
     const {
-      date,
+      firstDate,
+      secondDate,
       firstDatePickerFocus,
       secondDatePickerFocus
     } = this.state;
 
     return (
-      <div className="col-12">
-        <div className="col-6">
-          <p>From</p>
+      <div className="date-picker-wrapper">
+        <div className="date-picker">
+          <p>From:</p>
           <SingleDatePicker
-            onDateChange={this.onDateChange}
+            numberOfMonths={1}
+            onDateChange={this.onfirstDateChange}
             onFocusChange={this.onFirstDatePickerFocus}
             focused={firstDatePickerFocus}
-            date={date}
+            date={firstDate}
           />
         </div>
-        <div className="col-6">
-          <p>From</p>
+        <div className="date-picker">
+          <p>To:</p>
           <SingleDatePicker
-            onDateChange={this.onDateChange}
+            numberOfMonths={1}            
+            onDateChange={this.onsecondDateChange}
             onFocusChange={this.onSecondDatePickerFocus}
             focused={secondDatePickerFocus}
-            date={date}
+            date={secondDate}
           />
         </div>
       </div>
@@ -61,6 +70,8 @@ DatePicker.defaultProps = {
 };
 
 DatePicker.propTypes = {
+  getFirstDate: PropTypes.func,
+  getSecondDate: PropTypes.func,
   initialEndDate: PropTypes.any,
   initialStartDate: PropTypes.any
 };

@@ -1,8 +1,10 @@
 import { Template } from "meteor/templating";
-import { Components } from "@reactioncommerce/reaction-components";
+import AnalyticsComponent from "../container/analyticsSubscriptions";
 
 Template.actionableAnalytics.helpers({
   actionableAnalytics() {
-    return Components.ActionableAnalytics;
+    return {
+      component: AnalyticsComponent
+    };
   }
 });
