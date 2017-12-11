@@ -12,6 +12,7 @@ import {
   ProductDetail,
   ProductRatingsComponent,
   FeedbackBadge,
+  DigitalProduct,
   Footer
 } from "./components";
 
@@ -47,5 +48,6 @@ registerComponent("ProductNotFound", ProductNotFound);
 registerComponent("Reviews", ProductReviewsComponent);
 registerComponent("Ratings", ProductRatingsComponent);
 registerComponent("FeedbackBadge", FeedbackBadge);
+registerComponent("DigitalProduct", DigitalProduct);
 registerComponent("Footer", Footer);
 
