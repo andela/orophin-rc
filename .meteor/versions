@@ -105,6 +105,7 @@ mdg:validated-method@1.1.0
 mdg:validation-error@0.5.1
 meteor@1.7.2
 meteor-base@1.1.0
+meteor-tool@1.5.4_1
 meteorhacks:ssr@2.2.0
 meteorhacks:subs-manager@1.6.4
 minifier-css@1.2.16
