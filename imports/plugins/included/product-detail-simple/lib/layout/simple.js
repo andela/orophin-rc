@@ -221,6 +221,19 @@ export default function blocks() {
           component: "ProductReviewsComponent"
         }
       ]
+    },
+
+    {
+      type: "block",
+      element: "footer",
+      className: "pdp footer",
+      permissions: ["admin"], // Permissions for staff
+      audience: ["guest", "anonymous"], // Permissions for customers
+      children: [
+        {
+          component: "Footer"
+        }
+      ]
     }
   ];
 }

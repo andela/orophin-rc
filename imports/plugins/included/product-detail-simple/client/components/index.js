@@ -11,4 +11,5 @@ export { default as ProductNotFound } from "./productNotFound";
 export { default as ProductRatingsComponent } from "./productRatings";
 export { default as ReviewsComponent } from "./reviews";
 export { default as FeedbackBadge } from "./feedbackBadge";
+export { default as Footer } from "./footer";
 
