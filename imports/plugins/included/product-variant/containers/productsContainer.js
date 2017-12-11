@@ -43,7 +43,7 @@ function loadMoreProducts() {
   }
 }
 
-const wrapComponent = (Comp) => (
+export const wrapComponent = (Comp) => (
   class ProductsContainer extends Component {
     static propTypes = {
       canLoadMoreProducts: PropTypes.bool,

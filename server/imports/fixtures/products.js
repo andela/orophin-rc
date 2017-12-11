@@ -143,6 +143,7 @@ export default function () {
     title: faker.commerce.productName(),
     pageTitle: faker.lorem.sentence(),
     description: faker.lorem.paragraph(),
+    category: "OTHER",
     type: "simple",
     vendor: faker.company.companyName(),
     price: priceRange,
