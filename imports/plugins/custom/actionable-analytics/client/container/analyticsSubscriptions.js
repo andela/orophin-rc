@@ -1,9 +1,25 @@
 import _ from "lodash";
+import React, { Component } from "react";
 import { formatPriceString } from "/client/api";
 import { composeWithTracker } from "@reactioncommerce/reaction-components";
 import { Meteor } from "meteor/meteor";
 import { Orders, ProductRatings, Products } from "/lib/collections";
 import AnalyticsComponent from "./analyticsComponent";
+
+
+class AnalyticalSubsccription extends Component {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps !== this.props) {
+      this.props = nextProps;
+      console.log(this.props, "properties analytics");
+    }
+  }
+  render() {
+    return (
+      <AnalyticsComponent {...this.props} />
+    );
+  }
+}
 
 const extractAnalyticsItems = (allOrders) => {
   let totalSales = 0;
@@ -163,7 +179,7 @@ const statementsAnalysis = (myAnalytics) => {
 
   Object.keys(analyticsStatement).forEach((key) => {
     statements.push(analyticsStatement[key]);
-    analyticsStatement[key].totalSales = this.formatPriceString(analyticsStatement[key].totalSales);
+    analyticsStatement[key].totalSales = analyticsStatement[key].totalSales;
   });
   return _.orderBy(
     statements,
@@ -197,6 +213,16 @@ const getOverViews = (analyticsOrder) => {
   ];
 };
 
+const getStatement = (statement) => {
+  const accountStatement = [];
+  Object.keys(statement).map(key => accountStatement.push(statement[key]));
+  return _.orderBy(
+    accountStatement,
+    accountStatements => Date.parse(accountStatements.dateString),
+    "desc"
+  );
+};
+
 const getAverageRating = (product, ratings) => {
   let totalRating = 0;
   let averageRating = 0;
@@ -214,40 +240,78 @@ const getAverageRating = (product, ratings) => {
   return { productName: product.title, rating: averageRating };
 };
 
+const defaultPeriod = {
+  from: null,
+  to: new Date()
+};
+
+
 function composer(props, onData) {
   const orderSubscription = Meteor.subscribe("Orders");
   const ratingSubscriptions = Meteor.subscribe("ProductRating");
   const productSubscriptions = Meteor.subscribe("Products");
+  const analyticsOrders = [];
+  let analyticsData;
+  const overview = [];
+  const topEarningProducts = [];
+  const topSellingProducts = [];
+  const statementOfAccount = [];
+  const ordersAnalytics = [];
+  const FetchDataWithDate = (from = defaultPeriod.from, to = defaultPeriod.to) => {
+    // console.log(`from ${from} to ${to}`);
+    // console.log(typeof(from), typeof(to), ">>>>>>>>>", to);
+
+    if (to && from) {
+      // do something
+      return Orders.find({
+        createdAt: {
+          $gte: from,
+          $lte: to
+        }
+      }).fetch();
+    } else if (to && !from) {
+      // do another
+      return Orders.find({
+        createdAt: {
+          $lte: to
+        }
+      }).fetch();
+    } else if  (!to && from) {
+      // do last
+      return Orders.find({
+        createdAt: {
+          $gte: from
+        }
+      }).fetch();
+    }
+    return Orders.find().fetch();
+  };
 
   if (orderSubscription.ready() && ratingSubscriptions.ready() && productSubscriptions.ready()) {
-    const analyticsOrders = Orders.find({
-      createdAt: {
-        $gte: new Date("2017-10-03"),
-        $lte: new Date()
-      }
-    }).fetch();
     const ratings = ProductRatings.find().fetch();
     const products = Products.find({ type: "simple", isVisible: true }).fetch();
-    // const initialStartDate = new Date();
-    // const initialEndDate = new Date();
-    const productRatings = products.map(product => getAverageRating(product, ratings))
+
+    const topRatedProducts = products.map(product => getAverageRating(product, ratings))
       .sort((a, b) => a.rating < b.rating);
-    const analyticsData = extractAnalyticsItems(analyticsOrders);
-    const overview = getOverViews(analyticsData);
-    const topEarningProducts = topEarning(analyticsData.analytics);
-    const topSellingProducts = topSelling(analyticsData.analytics);
-
-
+    // const analyticsData = extractAnalyticsItems(analyticsOrders);
+    // const overview = getOverViews(analyticsData);
+    // const topEarningProducts = topEarning(analyticsData.analytics);
+    // const topSellingProducts = topSelling(analyticsData.analytics);
+    // const statementOfAccount = getStatement(analyticsData.analyticsStatement);
+    // const ordersAnalytics = analyticsData.ordersAnalytics;
+    // const dailySales = getDailySales(analyticsData.analyticsStatement);
     onData(null, {
       overview,
       topEarningProducts,
       topSellingProducts,
-      ratings,
-      productRatings
-      // initialStartDate,
-      // initialEndDate
+      topRatedProducts,
+      statementOfAccount,
+      analyticsData,
+      ordersAnalytics,
+      FetchDataWithDate,
+      analyticsOrders
     });
   }
 }
 
-export default composeWithTracker(composer)(AnalyticsComponent);
+export default composeWithTracker(composer)(AnalyticalSubsccription);

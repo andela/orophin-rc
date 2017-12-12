@@ -13,6 +13,7 @@ class ActionablePieChart extends Component {
       data,
       colors
     } = this.state;
+
     return (
       <PieChart width={1000} height={500} className={this.props.className}>
         <Pie data={data} fill="#8884d8" label dataKey="value">

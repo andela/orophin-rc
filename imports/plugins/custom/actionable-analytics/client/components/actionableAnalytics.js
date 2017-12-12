@@ -5,6 +5,7 @@ import { registerComponent, Components } from "@reactioncommerce/reaction-compon
 import DatePicker from "./dataPicker";
 import ActionablePieChart from "./pieChart";
 import TableCell from "./tableCell";
+import SimpleBart from "./barChart";
 
 class ActionableAnalytics extends Component {
   state = {
@@ -31,6 +32,11 @@ class ActionableAnalytics extends Component {
       ))
     );
   }
+
+  renderBarChart() {
+    return <SimpleBart data={this.props.data}/>;
+  }
+
   renderOverview = () => {
     if (this.state.selected > 0) return null;
 
@@ -52,79 +58,94 @@ class ActionableAnalytics extends Component {
       </List>
     );
   }
+
+  changeTableData(index) {
+    this.setState({
+      columns: this.props.tableDetails[index].column,
+      tableData: this.props.tableDetails[index].data
+    });
+  }
   handleTabClick = (event, value, index) => {
     this.setState({
       selected: index,
       tabTitle: this.state.tabs[index]
     });
+    this.changeTableData(index - 1);
   }
- renderTable = () => {
-   const {
-     columns,
-     tableData,
-     selected
-   } = this.state;
 
-   if (selected <= 0) return null;
+  renderTable = () => {
+    const {
+      columns,
+      tableData,
+      selected
+    } = this.state;
 
-   return (
-     <ReactTable
-       columns={columns}
-       data={tableData}
-       filterType={"column"}
-     />
-   );
- }
+    if (selected <= 0) return null;
 
- render() {
-   const { TabList } = Components;
+    return (
+      <ReactTable
+        columns={columns}
+        data={tableData}
+        filterType={"column"}
+      />
+    );
+  }
 
-   const {
-     pieChartData,
-     tabTitle
-   } = this.state;
+  render() {
+    const { TabList } = Components;
 
-   const {
-     getFirstDate,
-     getSecondDate
-   } = this.props;
+    const {
+      pieChartData,
+      tabTitle
+    } = this.state;
 
-   return (
-     <div className="container-fluid">
-       <h1 className="text-center actionable-header">Actionable Analytics</h1>
-       <div className="row actionable-body">
-         <DatePicker
-           getFirstDate={getFirstDate}
-           getSecondDate={getSecondDate}
-           initialEndDate={this.props.initialEndDate}
-           initialStartDate={this.props.initialStartDate}
-         />
-         <div className="actionable-tab-wrapper">
-           <TabList selectedTab={this.state.selected}>
-             {this.renderTabItems()}
-           </TabList>
-         </div>
-         <h3 className="tab-title">{tabTitle}</h3>
-         <div className="clo-12 actionable-table-wrapper">
-           {this.renderOverview()}
-           {this.renderTable()}
-         </div>
-         <ActionablePieChart className="actionable-chart-wrapper" data={pieChartData}/>
-       </div>
-     </div>
-   );
- }
+    const {
+      getFirstDate,
+      getSecondDate
+    } = this.props;
+
+    return (
+      <div className="container-fluid">
+        <h1 className="text-center actionable-header">Actionable Analytics</h1>
+        <div className="row actionable-body">
+          <DatePicker
+            getFirstDate={getFirstDate}
+            getSecondDate={getSecondDate}
+            setOrders={this.props.setOrders}
+            {...this.props}
+            // initialEndDate={this.props.initialEndDate}
+            // initialStartDate={this.props.initialStartDate}
+            // FetchDataWithDate={this.props.FetchDataWithDate}
+          />
+          <div className="actionable-tab-wrapper">
+            <TabList selectedTab={this.state.selected}>
+              {this.renderTabItems()}
+            </TabList>
+          </div>
+          <h3 className="tab-title">{tabTitle}</h3>
+          <div className="clo-12 actionable-table-wrapper">
+            {this.renderOverview()}
+            {this.renderTable()}
+          </div>
+          {/* {this.renderBarChart()} */}
+          <ActionablePieChart className="actionable-chart-wrapper" data={pieChartData}/>
+        </div>
+      </div>
+    );
+  }
 }
 
 ActionableAnalytics.propTypes = {
+  changeTableData: PropTypes.func.isRequired,
   columns: PropTypes.arrayOf(PropTypes.shape).isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape),
   getFirstDate: PropTypes.func,
   getSecondDate: PropTypes.func,
   initialEndDate: PropTypes.any,
   initialStartDate: PropTypes.any,
   overviews: PropTypes.arrayOf(PropTypes.shape).isRequired,
   pieChartData: PropTypes.arrayOf(PropTypes.shape).isRequired,
-  tableData: PropTypes.arrayOf(PropTypes.shape).isRequired,
+  tableDetails: PropTypes.arrayOf(PropTypes.shape).isRequired,
   tabs: PropTypes.arrayOf(PropTypes.shape)
 };
 
@@ -135,8 +156,8 @@ ActionableAnalytics.defaultProps = {
       accessor: "product" // String-based value accessors!
     },
     {
-      Header: "",
-      accessor: "age",
+      Header: "Age",
+      accessor: "quantitySold",
       Cell: TableCell
     }
     // {
@@ -150,6 +171,7 @@ ActionableAnalytics.defaultProps = {
     //   accessor: d => d.friend.age // Custom value accessors!
     // }
   ],
+  data: [{ a: 23 }, { b: 34 }, { c: 50 }],
   getFirstDate: () => {},
   getSecondDate: () => {},
   tableData: [
@@ -163,13 +185,12 @@ ActionableAnalytics.defaultProps = {
     }
   ],
   pieChartData: [
-    { name: "Group A", value: 400 },
     { name: "Group B", value: 300 },
     { name: "Group C", value: 300 },
     { name: "Group D", value: 200 }
   ],
   // overiews: [{ label: "hello", value: "world" }],
-  tabs: ["overview", "Top Sellers", "Top Earners", "Top Rated", "Statement", "Orders"]
+  tabs: ["overview", "Top Selling", "Top Earners", "Top Rated", "Statement", "Orders"]
 };
 
 registerComponent("ActionableAnalytics", ActionableAnalytics);
