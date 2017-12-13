@@ -16,6 +16,7 @@ class ProductGridItems extends Component {
     media: PropTypes.func,
     onClick: PropTypes.func,
     onDoubleClick: PropTypes.func,
+    openModal: PropTypes.func,
     pdpPath: PropTypes.func,
     positions: PropTypes.func,
     product: PropTypes.object,
@@ -28,10 +29,8 @@ class ProductGridItems extends Component {
     }
   }
 
-  handleClick = (event) => {
-    if (this.props.onClick) {
-      this.props.onClick(event);
-    }
+  addToCart = () => {
+    this.props.openModal(true, this.props.product._id);
   }
 
   renderPinned() {
@@ -53,11 +52,29 @@ class ProductGridItems extends Component {
   renderMedia() {
     if (this.props.media() === false) {
       return (
-        <span className="product-image" style={{ backgroundImage: "url('/resources/placeholder.gif')" }} />
+        <span className="product-image" style={{ backgroundImage: "url('/resources/placeholder.gif')" }}>
+          <div className="image-overlay">
+            <div
+              className="overlay-circle"
+              onClick={this.addToCart}
+            >
+              <i className="fa fa-shopping-cart fa-2x" />
+            </div>
+          </div>
+        </span>
       );
     }
     return (
-      <span className="product-image" style={{ backgroundImage: `url('${this.props.media().url({ store: "large" })}')` }}/>
+      <span className="product-image" style={{ backgroundImage: `url('${this.props.media().url({ store: "large" })}')` }}>
+        <div className="image-overlay">
+          <div
+            className="overlay-circle"
+            onClick={this.addToCart}
+          >
+            <i className="fa fa-shopping-cart fa-2x" />
+          </div>
+        </div>
+      </span>
     );
   }
 
@@ -96,7 +113,6 @@ class ProductGridItems extends Component {
           data-event-label="grid product click"
           data-event-value={this.props.product._id}
           onDoubleClick={this.handleDoubleClick}
-          onClick={this.handleClick}
         >
           <div className="overlay">
             <div className="overlay-title">{this.props.product.title}</div>
@@ -125,12 +141,10 @@ class ProductGridItems extends Component {
           <span className="product-grid-item-alerts" />
 
           <a className="product-grid-item-images"
-            href={this.props.pdpPath()}
             data-event-category="grid"
             data-event-label="grid product click"
             data-event-value={this.props.product._id}
             onDoubleClick={this.handleDoubleClick}
-            onClick={this.handleClick}
           >
             <div className={`product-primary-images ${this.renderVisible()}`}>
               {this.renderMedia()}

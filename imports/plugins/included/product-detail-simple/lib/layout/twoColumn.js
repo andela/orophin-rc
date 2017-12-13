@@ -180,6 +180,11 @@ export default function twoColumn() {
           }
         },
 
+        // Digital Product Field
+        {
+          component: "DigitalProduct"
+        },
+
         // Add to cart button
         {
           component: "AddToCartButton",
