@@ -11,6 +11,7 @@ import { ReactionProduct } from "/lib/api";
 import { applyProductRevision } from "/lib/api/products";
 import { Products, Tags, Shops } from "/lib/collections";
 import ProductsComponent from "../components/products";
+import { Cart } from "/lib/collections";
 
 /**
  * loadMoreProducts
@@ -197,10 +198,13 @@ function composer(props, onData) {
     Session.set("productGrid/selectedProducts", []);
   }
 
+  const storedCart = Cart.findOne();
+
   onData(null, {
     productsSubscription,
     products: stateProducts,
-    canLoadMoreProducts
+    canLoadMoreProducts,
+    storedCart
   });
 }
 
