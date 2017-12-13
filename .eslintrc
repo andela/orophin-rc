@@ -15,7 +15,8 @@
     "jest": true,
     "expect": true,
     "test": true,
-    "tinymce": true
+    "tinymce": true,
+    "PaystackPop": true
   },
   "parserOptions": {
      "ecmaVersion": 6,
