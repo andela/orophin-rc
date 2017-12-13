@@ -459,7 +459,9 @@ Meteor.methods({
           metafields: options.metafields,
           title: product.title,
           type: product.type,
-          parcel
+          parcel,
+          isDigital: product.isDigital,
+          downloadLink: product.downloadLink
         }
       }
     }, function (error, result) {

@@ -399,30 +399,6 @@ describe("orders test", function () {
     });
   });
 
-  describe("orders/sendNotification", function () {
-    it("should return access denied if userId is not availble", function () {
-      spyOnMethod("sendNotification");
-      function sendNotification() {
-        return Meteor.call("orders/sendNotification", order);
-      }
-      expect(sendNotification).to.throw(Meteor.error, /Access Denied/);
-    });
-
-    it("should send email notification", function () {
-      spyOnMethod("sendNotification", order.userId);
-      sandbox.stub(Media, "findOne", () => {
-        // stub url method for media file
-        const url = () => "/stub/url";
-        return {
-          url
-        };
-      });
-      sandbox.stub(Shops, "findOne", () => shop);
-      const result = Meteor.call("orders/sendNotification", order);
-      expect(result).to.be.true;
-    });
-  });
-
   describe("orders/updateShipmentTracking", function () {
     it("should return an error if user does not have permission", function () {
       sandbox.stub(Reaction, "hasPermission", () => false);
@@ -486,67 +462,6 @@ describe("orders test", function () {
       expect(orders.history[0].event).to.equal(event);
       expect(orders.history[0].value).to.equal(trackingValue);
       expect(orders.history[0].userId).to.equal(order.userId);
-    });
-  });
-
-  describe("orders/capturePayments", function () {
-    beforeEach(function (done) {
-      Orders.update({
-        "_id": order._id,
-        "billing.paymentMethod.transactionId": billingObjectMethod(order).paymentMethod.transactionId
-      }, {
-        $set: {
-          "billing.$.paymentMethod.mode": "capture",
-          "billing.$.paymentMethod.status": "approved"
-        }
-      });
-      return done();
-    });
-
-    it("should return access denied if user does not have access", function () {
-      sandbox.stub(Reaction, "hasPermission", () => false);
-      spyOnMethod("capturePayments", order.userId);
-      function capturePayments() {
-        return Meteor.call("orders/capturePayments", order._id);
-      }
-      expect(capturePayments).to.throw(Meteor.error, /Access Denied/);
-    });
-
-    it("should update the order item workflow to coreOrderItemWorkflow/captured", function () {
-      sandbox.stub(Reaction, "hasPermission", () => true);
-      spyOnMethod("capturePayments", order.userId);
-      Meteor.call("orders/capturePayments", order._id);
-      const orderItemWorkflow = Orders.findOne({ _id: order._id }).items[0].workflow;
-      expect(orderItemWorkflow.status).to.equal("coreOrderItemWorkflow/captured");
-    });
-
-    it("should update the order after the payment processor has captured the payment", function (done) {
-      sandbox.stub(Reaction, "hasPermission", () => true);
-      spyOnMethod("capturePayments", order.userId);
-      Meteor.call("orders/capturePayments", order._id, () => {
-        const orderPaymentMethod = billingObjectMethod(Orders.findOne({ _id: order._id })).paymentMethod;
-        expect(orderPaymentMethod.mode).to.equal("capture");
-        expect(orderPaymentMethod.status).to.equal("completed");
-      });
-      return done();
-    });
-
-    it("should update order payment method status to error if payment processor fails", function (done) {
-      sandbox.stub(Reaction, "hasPermission", () => true);
-      spyOnMethod("capturePayments", order.userId);
-      sandbox.stub(Meteor.server.method_handlers, "example/payment/capture", function () {
-        check(arguments, [Match.Any]);
-        return {
-          error: "stub error",
-          saved: false
-        };
-      });
-      Meteor.call("orders/capturePayments", order._id, () => {
-        const orderPaymentMethod = billingObjectMethod(Orders.findOne({ _id: order._id })).paymentMethod;
-        expect(orderPaymentMethod.mode).to.equal("capture");
-        expect(orderPaymentMethod.status).to.equal("error");
-      });
-      return done();
     });
   });
 

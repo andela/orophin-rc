@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { Components } from "@reactioncommerce/reaction-components";
 import { Meteor } from "meteor/meteor";
 
-
 // TODO: Delete this, and do it the react way - Mike M.
 async function openSearchModalLegacy(props) {
   if (Meteor.isClient) {
@@ -105,6 +104,13 @@ class NavBar extends Component {
           <Components.CartPanel />
         </div>
       </div>
+
+    );
+  }
+
+  renderStaticPages() {
+    return (
+      <Components.StaticPagesComponent />
     );
   }
 
@@ -143,6 +149,7 @@ class NavBar extends Component {
         {this.renderNotificationIcon()}
         {this.renderLanguage()}
         {this.renderCurrency()}
+        {this.renderStaticPages()}
         {this.renderMainDropdown()}
         {this.renderCartContainerAndPanel()}
       </div>
