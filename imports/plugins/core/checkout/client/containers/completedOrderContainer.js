@@ -62,6 +62,14 @@ function composer(props, onData) {
         shipping: order.shipping
       };
 
+      let hasDigitalProduct = false;
+      const Orderitem = order.items;
+      Orderitem.forEach((item) => {
+        if (item.isDigital === true) {
+          hasDigitalProduct = true;
+        }
+      });
+
       if (imageSub.ready()) {
         const productImages = Media.find().fetch();
 
@@ -71,6 +79,7 @@ function composer(props, onData) {
           order,
           orderId,
           orderSummary,
+          hasDigitalProduct,
           paymentMethods: order.getUniquePaymentMethods(),
           productImages
         });

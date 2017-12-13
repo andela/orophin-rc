@@ -15,6 +15,7 @@
     "jest": true,
     "expect": true,
     "test": true,
+    "tinymce": true,
     "PaystackPop": true
   },
   "parserOptions": {
