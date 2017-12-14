@@ -1,8 +1,8 @@
 import { Reaction } from "/server/api";
 
 Reaction.registerPackage({
-  label: "Actionable Analysis",
-  name: "actionableAnalytics",
+  label: "Actionable Analytics",
+  name: "Analytics",
   autoEnable: true,
   registry: [{
     label: "Actionable Analysis",

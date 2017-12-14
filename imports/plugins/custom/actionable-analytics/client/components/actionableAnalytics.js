@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import ReactTable from "react-table";
 import PropTypes from "prop-types";
+
 import { registerComponent, Components } from "@reactioncommerce/reaction-components";
 import DatePicker from "./dataPicker";
-import SimplePieChart from "./pieChart";
-import TableCell from "./tableCell";
 import SimpleBarChart from "./barChart";
 
 class ActionableAnalytics extends Component {
@@ -48,31 +47,26 @@ class ActionableAnalytics extends Component {
   renderBarChart(data) {
     const currentData = data[this.state.selected].data;
     const rendered = this.props.displayChartFor(currentData, this.state.nameValue[this.state.selected].name, this.state.nameValue[this.state.selected].value);
-    if (!rendered) {
+    if (!rendered.length > 0 || this.state.nameValue[this.state.selected].value === undefined) {
       return null;
     }
     return <SimpleBarChart data={rendered}/>;
-  }
-
-  renderPieChart(data) {
-    const currentData = data[this.state.selected].data;
-    const rendered = this.props.displayChartFor(currentData, this.state.nameValue[this.state.selected].name, this.state.nameValue[this.state.selected].value);
-    if (!rendered) {
-      return null;
-    }
-    return <SimplePieChart data={rendered}/>;
   }
 
   renderOverview = (overviews) => {
     if (this.state.selected > 0) return null;
     if (overviews) {
       const { ListItem, List } = Components;
-      // const overviews  = overviews || [];
-      const Label = (props) => <span>{props.label}: <em>{props.value}</em></span>;
+      const Label = (props) => {
+        return (
+          <span>
+            {props.label}: <b>{props.value}</b>
+          </span>);
+      };
       return (
         <List>
-          {overviews.map((overview) => (
-            <ListItem key={`${overview.value}${Date.now()}`}>
+          {overviews.map((overview, i) => (
+            <ListItem key={i}>
               <span>{overview.label}</span>
               <Label
                 title={overview.label}
@@ -109,7 +103,11 @@ class ActionableAnalytics extends Component {
     } = this.state;
 
     if (selected <= 0) return null;
-
+    if (tableData.length < 1) {
+      return (
+        <Components.NotFound message="No record found"/>
+      );
+    }
     return (
       <ReactTable
         columns={columns}
@@ -153,7 +151,6 @@ class ActionableAnalytics extends Component {
             {this.renderTable()}
           </div>
           {this.renderBarChart(this.props.tableDetails)}
-          {this.renderPieChart(this.props.tableDetails)}
         </div>
       </div>
     );
@@ -173,7 +170,14 @@ ActionableAnalytics.defaultProps = {
   columns: [],
   getFirstDate: () => {},
   getSecondDate: () => {},
-  tabs: ["Overviews", "Top Selling", "Top Earners", "Top Rated", "Statement", "Order Details"]
+  tabs: [
+    "Overviews",
+    "Top Selling",
+    "Top Earners",
+    "Top Rated",
+    "Statement",
+    "Order Details"
+  ]
 };
 
 registerComponent("ActionableAnalytics", ActionableAnalytics);

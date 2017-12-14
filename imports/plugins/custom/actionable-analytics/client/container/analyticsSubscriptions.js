@@ -2,6 +2,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 import { composeWithTracker } from "@reactioncommerce/reaction-components";
 import { Meteor } from "meteor/meteor";
+import formater from 'currency-formatter';
 import { Orders, ProductRatings, Products } from "/lib/collections";
 import AnalyticsComponent from "./analyticsComponent";
 
@@ -13,9 +14,9 @@ class AnalyticalSubsccription extends Component {
   }
 }
 
-const formatPriceString = (value) => {
-  return `₦${value}`;
-};
+// const formatPriceString = (value) => {
+//   return `₦${value}`;
+// };
 
 const extractAnalyticsItems = (allOrders) => {
   let totalSales = 0;
@@ -34,8 +35,8 @@ const extractAnalyticsItems = (allOrders) => {
         country: order.billing[0].address.country,
         city: `${order.billing[0].address.city}, ${order.billing[0].address.region}`,
         paymentProcessor: order.billing[0].paymentMethod.processor,
-        shipping: formatPriceString(order.billing[0].invoice.shipping),
-        taxes: formatPriceString(order.billing[0].invoice.taxes)
+        shipping: formater.format(order.billing[0].invoice.shipping, {symbol: '₦'}),
+        taxes: formater.format(order.billing[0].invoice.taxes, {symbol: '₦'})
       });
       totalSales += parseFloat(order.billing[0].invoice.subtotal);
       totalItemsPurchased += order.items.length;
@@ -67,8 +68,8 @@ const extractAnalyticsItems = (allOrders) => {
       ordersCancelled += 1;
     }
   });
-  totalSales = formatPriceString(totalSales);
-  totalShippingCost = formatPriceString(totalShippingCost);
+  totalSales = formater.format(totalSales, {symbol: '₦'});
+  totalShippingCost = formater.format(totalShippingCost, {symbol: '₦'});
   return { totalSales, totalItemsPurchased, totalShippingCost, analytics, analyticsStatement, ordersAnalytics, ordersCancelled };
 };
 
@@ -95,7 +96,7 @@ const topEarning = (myAnalytics) => {
     products.push({
       product: key,
       salesSorter: analytics[key].totalSales,
-      totalSales: formatPriceString(analytics[key].totalSales)
+      totalSales: formater.format(analytics[key].totalSales, {symbol: '₦'})
     });
   });
   return _.orderBy(
@@ -111,7 +112,7 @@ const statementsAnalysis = (myAnalytics) => {
 
   Object.keys(analyticsStatement).forEach((key) => {
     statements.push(analyticsStatement[key]);
-    analyticsStatement[key].totalSales = formatPriceString(analyticsStatement[key].totalSales);
+    analyticsStatement[key].totalSales = formater.format(analyticsStatement[key].totalSales, {symbol: '₦'});
   });
   return _.orderBy(
     statements,

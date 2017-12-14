@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { SingleDatePicker } from "react-dates";
 import PropTypes from "prop-types";
+import moment from "moment";
 import { registerComponent } from "@reactioncommerce/reaction-components";
 
 class DatePicker extends Component {
   state = {
     firstDatePickerFocus: false,
     secondDatePickerFocus: false,
-    to: null,
-    from: null
+    to: moment(Date.now()),
+    from: moment(Date.now()).subtract(1, "months")
   }
 
   setToDate = (date) => {
