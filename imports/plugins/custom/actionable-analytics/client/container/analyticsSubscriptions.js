@@ -1,25 +1,21 @@
 import _ from "lodash";
 import React, { Component } from "react";
-import { formatPriceString } from "/client/api";
 import { composeWithTracker } from "@reactioncommerce/reaction-components";
 import { Meteor } from "meteor/meteor";
 import { Orders, ProductRatings, Products } from "/lib/collections";
 import AnalyticsComponent from "./analyticsComponent";
 
-
 class AnalyticalSubsccription extends Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps !== this.props) {
-      this.props = nextProps;
-      console.log(this.props, "properties analytics");
-    }
-  }
   render() {
     return (
       <AnalyticsComponent {...this.props} />
     );
   }
 }
+
+const formatPriceString = (value) => {
+  return `₦${value}`;
+};
 
 const extractAnalyticsItems = (allOrders) => {
   let totalSales = 0;
@@ -38,8 +34,8 @@ const extractAnalyticsItems = (allOrders) => {
         country: order.billing[0].address.country,
         city: `${order.billing[0].address.city}, ${order.billing[0].address.region}`,
         paymentProcessor: order.billing[0].paymentMethod.processor,
-        shipping: order.billing[0].invoice.shipping,
-        taxes: order.billing[0].invoice.taxes
+        shipping: formatPriceString(order.billing[0].invoice.shipping),
+        taxes: formatPriceString(order.billing[0].invoice.taxes)
       });
       totalSales += parseFloat(order.billing[0].invoice.subtotal);
       totalItemsPurchased += order.items.length;
@@ -71,58 +67,9 @@ const extractAnalyticsItems = (allOrders) => {
       ordersCancelled += 1;
     }
   });
+  totalSales = formatPriceString(totalSales);
+  totalShippingCost = formatPriceString(totalShippingCost);
   return { totalSales, totalItemsPurchased, totalShippingCost, analytics, analyticsStatement, ordersAnalytics, ordersCancelled };
-};
-
-const getPayment = (myAnalytics) => {
-  const rank = { Paystack: 0, Wallet: 0, Example: 0 };
-  const frequency = [];
-  const names = [];
-
-  myAnalytics.forEach((analytic) => {
-    const key = analytic.paymentProcessor;
-    if (rank[key]) {
-      rank[key]++;
-    } else {
-      rank[key] = 1;
-    }
-  });
-
-  Object.keys(rank).forEach((element) => {
-    names.push(element);
-    frequency.push(rank[element]);
-  });
-  return {
-    frequency,
-    names
-  };
-};
-
-const getDailySales = (statement) => {
-  const salesObj = {};
-  let frequency = [];
-  let names = [];
-  statement.forEach((analytics) => {
-    const data = analytics.dateString;
-    let totalSale = analytics.totalSales.replace("$", "");
-    totalSale = totalSale.replace(",", "");
-    totalSale = parseFloat(totalSale);
-    if (salesObj[data]) {
-      salesObj[data] += totalSale;
-    } else {
-      salesObj[data] = totalSale;
-    }
-  });
-  Object.keys(salesObj).forEach((element) => {
-    names.push(element);
-    frequency.push(salesObj[element]);
-  });
-  frequency = frequency.reverse();
-  names = names.reverse();
-  return {
-    frequency,
-    names
-  };
 };
 
 const topSelling = (myAnalytics) => {
@@ -158,59 +105,19 @@ const topEarning = (myAnalytics) => {
   );
 };
 
-const daysDifference = (date1, date2) => {
-  // a Day represented in milliseconds
-  const oneDay = 1000 * 60 * 60 * 24;
-  // Calculate the difference in milliseconds
-  const difference = new Date(new Date(date2).setHours(23)) - new Date(new Date(date1).setHours(0));
-  // Convert back to days and return
-  return Math.round(difference / oneDay);
-};
-
-const setUpAverageSales = (totalSales, fromDate, toDate) => {
-  const difference = daysDifference(Date.parse(fromDate), Date.parse(toDate));
-  const salesPerDay = difference === 0 ? totalSales : totalSales / difference;
-  return salesPerDay;
-};
-
 const statementsAnalysis = (myAnalytics) => {
   const statements = [];
   const analyticsStatement = myAnalytics;
 
   Object.keys(analyticsStatement).forEach((key) => {
     statements.push(analyticsStatement[key]);
-    analyticsStatement[key].totalSales = analyticsStatement[key].totalSales;
+    analyticsStatement[key].totalSales = formatPriceString(analyticsStatement[key].totalSales);
   });
   return _.orderBy(
     statements,
     statement => Date.parse(statement.dateString),
     "desc"
   );
-};
-
-const getOverViews = (analyticsOrder) => {
-  return [
-    {
-      label: "Total Sales",
-      value: analyticsOrder.totalSales
-    },
-    {
-      label: "Total Shipping Cost",
-      value: analyticsOrder.totalShippingCost
-    },
-    {
-      label: "Total Items Purchased",
-      value: analyticsOrder.totalItemsPurchased
-    },
-    {
-      label: "Orders Cancelled",
-      value: analyticsOrder.ordersCancelled
-    },
-    {
-      label: "Total Orders Placed",
-      value: analyticsOrder.ordersAnalytics.length
-    }
-  ];
 };
 
 const getStatement = (statement) => {
@@ -231,7 +138,7 @@ const getAverageRating = (product, ratings) => {
   productRatings.map((rating) => {
     totalRating += rating.ratingsScore;
   });
-  const raters = ratings.length;
+  const raters = productRatings.length;
   if (raters < 1) {
     averageRating = "0.0";
   } else {
@@ -240,76 +147,64 @@ const getAverageRating = (product, ratings) => {
   return { productName: product.title, rating: averageRating };
 };
 
-const defaultPeriod = {
-  from: null,
-  to: new Date()
+const fetchDataWithDate = (from, to, model = Orders) => {
+  const option1 = {};
+  const option2 = {
+    type: "simple",
+    isVisible: true
+  };
+  let defaultOption = option1;
+  if (model === Products) {
+    defaultOption = option2;
+  }
+  if (to && from) {
+    defaultOption.createdAt = {};
+    defaultOption.createdAt.$gte = from;
+    defaultOption.createdAt.$lte = to;
+    return model.find(defaultOption).fetch();
+  } else if (to && !from) {
+    defaultOption.createdAt = {};
+    defaultOption.createdAt.$lte = to;
+    return model.find(defaultOption).fetch();
+  } else if  (!to && from) {
+    defaultOption.createdAt = {};
+    defaultOption.createdAt.from = from;
+    return model.find(defaultOption).fetch();
+  }
+  return model.find(defaultOption).fetch();
 };
 
+const getTopRatedProducts = (products) => {
+  const ratings = ProductRatings.find().fetch();
+  return products.map(product => getAverageRating(product, ratings))
+    .sort((a, b) => a.rating < b.rating);
+};
+
+const displayChartFor = (data = [], dataName, dataValue) => {
+  const chartData = data.map(each => {
+    return {
+      name: each[dataName],
+      value: parseFloat(each[dataValue])
+    };
+  });
+  return chartData;
+};
 
 function composer(props, onData) {
   const orderSubscription = Meteor.subscribe("Orders");
   const ratingSubscriptions = Meteor.subscribe("ProductRating");
   const productSubscriptions = Meteor.subscribe("Products");
-  const analyticsOrders = [];
-  let analyticsData;
-  const overview = [];
-  const topEarningProducts = [];
-  const topSellingProducts = [];
-  const statementOfAccount = [];
-  const ordersAnalytics = [];
-  const FetchDataWithDate = (from = defaultPeriod.from, to = defaultPeriod.to) => {
-    // console.log(`from ${from} to ${to}`);
-    // console.log(typeof(from), typeof(to), ">>>>>>>>>", to);
-
-    if (to && from) {
-      // do something
-      return Orders.find({
-        createdAt: {
-          $gte: from,
-          $lte: to
-        }
-      }).fetch();
-    } else if (to && !from) {
-      // do another
-      return Orders.find({
-        createdAt: {
-          $lte: to
-        }
-      }).fetch();
-    } else if  (!to && from) {
-      // do last
-      return Orders.find({
-        createdAt: {
-          $gte: from
-        }
-      }).fetch();
-    }
-    return Orders.find().fetch();
-  };
 
   if (orderSubscription.ready() && ratingSubscriptions.ready() && productSubscriptions.ready()) {
-    const ratings = ProductRatings.find().fetch();
-    const products = Products.find({ type: "simple", isVisible: true }).fetch();
-
-    const topRatedProducts = products.map(product => getAverageRating(product, ratings))
-      .sort((a, b) => a.rating < b.rating);
-    // const analyticsData = extractAnalyticsItems(analyticsOrders);
-    // const overview = getOverViews(analyticsData);
-    // const topEarningProducts = topEarning(analyticsData.analytics);
-    // const topSellingProducts = topSelling(analyticsData.analytics);
-    // const statementOfAccount = getStatement(analyticsData.analyticsStatement);
-    // const ordersAnalytics = analyticsData.ordersAnalytics;
-    // const dailySales = getDailySales(analyticsData.analyticsStatement);
     onData(null, {
-      overview,
-      topEarningProducts,
-      topSellingProducts,
-      topRatedProducts,
-      statementOfAccount,
-      analyticsData,
-      ordersAnalytics,
-      FetchDataWithDate,
-      analyticsOrders
+      extractAnalyticsItems,
+      topSelling,
+      topEarning,
+      statementsAnalysis,
+      getStatement,
+      getTopRatedProducts,
+      fetchDataWithDate,
+      displayChartFor
     });
   }
 }

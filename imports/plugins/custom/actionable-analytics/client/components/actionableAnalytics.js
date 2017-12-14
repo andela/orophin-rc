@@ -3,18 +3,30 @@ import ReactTable from "react-table";
 import PropTypes from "prop-types";
 import { registerComponent, Components } from "@reactioncommerce/reaction-components";
 import DatePicker from "./dataPicker";
-import ActionablePieChart from "./pieChart";
+import SimplePieChart from "./pieChart";
 import TableCell from "./tableCell";
-import SimpleBart from "./barChart";
+import SimpleBarChart from "./barChart";
 
 class ActionableAnalytics extends Component {
   state = {
     tabs: this.props.tabs,
-    columns: this.props.columns,
-    tableData: this.props.tableData,
-    pieChartData: this.props.pieChartData,
+    columns: this.props.tableDetails[0].column,
+    tableData: this.props.tableDetails[0].data,
+    tableDetails: this.props.tableDetails,
+    nameValue: this.props.chartDataNameValue,
     selected: 0,
+    currentIndex: 0,
     tabTitle: this.props.tabs[0]
+  }
+
+  componentWillUpdate(nextProps) {
+    if (nextProps.tableDetails !== this.props.tableDetails) {
+      this.setState({
+        columns: nextProps.tableDetails[0].column,
+        selected: 0,
+        tableData: nextProps.tableDetails[0].data
+      });
+    }
   }
 
   renderTabItems = () => {
@@ -33,44 +45,60 @@ class ActionableAnalytics extends Component {
     );
   }
 
-  renderBarChart() {
-    return <SimpleBart data={this.props.data}/>;
+  renderBarChart(data) {
+    const currentData = data[this.state.selected].data;
+    const rendered = this.props.displayChartFor(currentData, this.state.nameValue[this.state.selected].name, this.state.nameValue[this.state.selected].value);
+    if (!rendered) {
+      return null;
+    }
+    return <SimpleBarChart data={rendered}/>;
   }
 
-  renderOverview = () => {
+  renderPieChart(data) {
+    const currentData = data[this.state.selected].data;
+    const rendered = this.props.displayChartFor(currentData, this.state.nameValue[this.state.selected].name, this.state.nameValue[this.state.selected].value);
+    if (!rendered) {
+      return null;
+    }
+    return <SimplePieChart data={rendered}/>;
+  }
+
+  renderOverview = (overviews) => {
     if (this.state.selected > 0) return null;
-
-    const { ListItem, List } = Components;
-    const overviews  = this.props.overviews || [];
-    const Label = (props) => <span>{props.label}: <em>{props.value}</em></span>;
-
-    return (
-      <List>
-        {overviews.map((overview) => (
-          <ListItem key={`${overview.value}${Date.now()}`}>
-            <span>{overview.label}</span>
-            <Label
-              title={overview.label}
-              value={overview.value}
-            />
-          </ListItem>)
-        )}
-      </List>
-    );
+    if (overviews) {
+      const { ListItem, List } = Components;
+      // const overviews  = overviews || [];
+      const Label = (props) => <span>{props.label}: <em>{props.value}</em></span>;
+      return (
+        <List>
+          {overviews.map((overview) => (
+            <ListItem key={`${overview.value}${Date.now()}`}>
+              <span>{overview.label}</span>
+              <Label
+                title={overview.label}
+                value={overview.value}
+              />
+            </ListItem>)
+          )}
+        </List>
+      );
+    }
   }
 
   changeTableData(index) {
     this.setState({
       columns: this.props.tableDetails[index].column,
-      tableData: this.props.tableDetails[index].data
+      tableData: this.props.tableDetails[index].data,
+      currentIndex: index
     });
   }
+
   handleTabClick = (event, value, index) => {
     this.setState({
       selected: index,
       tabTitle: this.state.tabs[index]
     });
-    this.changeTableData(index - 1);
+    this.changeTableData(index);
   }
 
   renderTable = () => {
@@ -87,6 +115,7 @@ class ActionableAnalytics extends Component {
         columns={columns}
         data={tableData}
         filterType={"column"}
+        defaultPageSize={6}
       />
     );
   }
@@ -95,7 +124,6 @@ class ActionableAnalytics extends Component {
     const { TabList } = Components;
 
     const {
-      pieChartData,
       tabTitle
     } = this.state;
 
@@ -111,11 +139,8 @@ class ActionableAnalytics extends Component {
           <DatePicker
             getFirstDate={getFirstDate}
             getSecondDate={getSecondDate}
-            setOrders={this.props.setOrders}
+            getSelectedDate={this.props.getSelectedDate}
             {...this.props}
-            // initialEndDate={this.props.initialEndDate}
-            // initialStartDate={this.props.initialStartDate}
-            // FetchDataWithDate={this.props.FetchDataWithDate}
           />
           <div className="actionable-tab-wrapper">
             <TabList selectedTab={this.state.selected}>
@@ -124,11 +149,11 @@ class ActionableAnalytics extends Component {
           </div>
           <h3 className="tab-title">{tabTitle}</h3>
           <div className="clo-12 actionable-table-wrapper">
-            {this.renderOverview()}
+            {this.renderOverview(this.props.tableDetails[0])}
             {this.renderTable()}
           </div>
-          {/* {this.renderBarChart()} */}
-          <ActionablePieChart className="actionable-chart-wrapper" data={pieChartData}/>
+          {this.renderBarChart(this.props.tableDetails)}
+          {this.renderPieChart(this.props.tableDetails)}
         </div>
       </div>
     );
@@ -136,61 +161,19 @@ class ActionableAnalytics extends Component {
 }
 
 ActionableAnalytics.propTypes = {
-  changeTableData: PropTypes.func.isRequired,
-  columns: PropTypes.arrayOf(PropTypes.shape).isRequired,
-  data: PropTypes.arrayOf(PropTypes.shape),
-  getFirstDate: PropTypes.func,
-  getSecondDate: PropTypes.func,
-  initialEndDate: PropTypes.any,
-  initialStartDate: PropTypes.any,
-  overviews: PropTypes.arrayOf(PropTypes.shape).isRequired,
-  pieChartData: PropTypes.arrayOf(PropTypes.shape).isRequired,
+  chartDataNameValue: PropTypes.arrayOf(PropTypes.any),
+  displayChartFor: PropTypes.func,
+  fetchDataWithDate: PropTypes.func,
+  getSelectedDate: PropTypes.func,
   tableDetails: PropTypes.arrayOf(PropTypes.shape).isRequired,
   tabs: PropTypes.arrayOf(PropTypes.shape)
 };
 
 ActionableAnalytics.defaultProps = {
-  columns: [
-    {
-      Header: "product Name",
-      accessor: "product" // String-based value accessors!
-    },
-    {
-      Header: "Age",
-      accessor: "quantitySold",
-      Cell: TableCell
-    }
-    // {
-    //   id: "friendName", // Required because our accessor is not a string
-    //   Header: "Friend Name",
-    //   accessor: d => d.friend.name // Custom value accessors!
-    // },
-    // {
-    //   id: "friendAge", // Required because our accessor is not a string
-    //   Header: "Friend Age",
-    //   accessor: d => d.friend.age // Custom value accessors!
-    // }
-  ],
-  data: [{ a: 23 }, { b: 34 }, { c: 50 }],
+  columns: [],
   getFirstDate: () => {},
   getSecondDate: () => {},
-  tableData: [
-    {
-      name: "Tanner Linsley",
-      age: 26,
-      friend: {
-        name: "Jason Maurer",
-        age: 23
-      }
-    }
-  ],
-  pieChartData: [
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 }
-  ],
-  // overiews: [{ label: "hello", value: "world" }],
-  tabs: ["overview", "Top Selling", "Top Earners", "Top Rated", "Statement", "Orders"]
+  tabs: ["Overviews", "Top Selling", "Top Earners", "Top Rated", "Statement", "Order Details"]
 };
 
 registerComponent("ActionableAnalytics", ActionableAnalytics);
