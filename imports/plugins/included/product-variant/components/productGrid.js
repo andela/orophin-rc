@@ -111,7 +111,9 @@ class ProductGrid extends Component {
   }
   handleCart = () => {
     const { productId, variant } = this.state;
-    if (productId && variant._id) {
+    if (Object.keys(variant).length < 1) {
+      Alerts.toast("Please select a variant", "error");
+    } else if (productId && variant._id) {
       Meteor.call("cart/addToCart", this.state.productId, variant._id, 1, (error) => {
         if (error) {
           Logger.error(error, "Failed to add to cart.");
@@ -125,46 +127,44 @@ class ProductGrid extends Component {
 
         return true;
       });
-    }
-    // template.$(".variant-select-option").removeClass("active");
-    ReactionProduct.setCurrentVariant(null);
-    // qtyField.val(1);
-    // scroll to top on cart add
-    $("html,body").animate({
-      scrollTop: 0
-    }, 0);
-    // slide out label
-    const addToCartText = i18next.t("productDetail.addedToCart");
-    const addToCartTitle = variant.title || "";
-    // Grab and cache the width of the alert to be used in animation
-    const alertWidth = $(".cart-alert").width();
-    const direction = i18next.dir() === "rtl" ? "left" : "right";
-    const oppositeDirection = i18next.dir() === "rtl" ? "right" : "left";
-    if ($(".cart-alert").css("display") === "none") {
-      $("#spin").addClass("hidden");
-      $(".cart-alert-text").text(`${1} ${addToCartTitle} ${addToCartText}`);
-      this.handleSlideOut(alertWidth, direction, oppositeDirection);
-      this.animationTimeOut = setTimeout(() => {
-        this.handleSlideIn(alertWidth, direction, oppositeDirection);
-      }, 4000);
-    } else {
-      clearTimeout(this.textTimeOut);
-
-      // hides text and display spinner
-      $(".cart-alert-text").hide();
-      $("#spin").removeClass("hidden");
-
-      this.textTimeOut = setTimeout(() => {
+      ReactionProduct.setCurrentVariant(null);
+      // scroll to top on cart add
+      $("html,body").animate({
+        scrollTop: 0
+      }, 0);
+      // slide out label
+      const addToCartText = i18next.t("productDetail.addedToCart");
+      const addToCartTitle = variant.title || "";
+      // Grab and cache the width of the alert to be used in animation
+      const alertWidth = $(".cart-alert").width();
+      const direction = i18next.dir() === "rtl" ? "left" : "right";
+      const oppositeDirection = i18next.dir() === "rtl" ? "right" : "left";
+      if ($(".cart-alert").css("display") === "none") {
         $("#spin").addClass("hidden");
-        $(".cart-alert-text").text(`${this.state.productClick * 1} ${addToCartTitle} ${addToCartText}`);
-        $(".cart-alert-text").fadeIn("slow");
-        this.setState({ productClick: 0 });
-      }, 2000);
+        $(".cart-alert-text").text(`${1} ${addToCartTitle} ${addToCartText}`);
+        this.handleSlideOut(alertWidth, direction, oppositeDirection);
+        this.animationTimeOut = setTimeout(() => {
+          this.handleSlideIn(alertWidth, direction, oppositeDirection);
+        }, 4000);
+      } else {
+        clearTimeout(this.textTimeOut);
 
-      clearTimeout(this.animationTimeOut);
-      this.animationTimeOut = setTimeout(() => {
-        this.handleSlideIn(alertWidth, direction, oppositeDirection);
-      }, 4000);
+        // hides text and display spinner
+        $(".cart-alert-text").hide();
+        $("#spin").removeClass("hidden");
+
+        this.textTimeOut = setTimeout(() => {
+          $("#spin").addClass("hidden");
+          $(".cart-alert-text").text(`${this.state.productClick * 1} ${addToCartTitle} ${addToCartText}`);
+          $(".cart-alert-text").fadeIn("slow");
+          this.setState({ productClick: 0 });
+        }, 2000);
+
+        clearTimeout(this.animationTimeOut);
+        this.animationTimeOut = setTimeout(() => {
+          this.handleSlideIn(alertWidth, direction, oppositeDirection);
+        }, 4000);
+      }
     }
   }
 
