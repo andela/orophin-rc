@@ -195,6 +195,11 @@ export default function blocks() {
           }
         },
 
+        // Digital Product Field
+        {
+          component: "DigitalProduct"
+        },
+
         // Add to cart button
         {
           component: "AddToCartButton",
@@ -219,6 +224,19 @@ export default function blocks() {
       children: [
         {
           component: "ProductReviewsComponent"
+        }
+      ]
+    },
+
+    {
+      type: "block",
+      element: "footer",
+      className: "pdp footer",
+      permissions: ["admin"], // Permissions for staff
+      audience: ["guest", "anonymous"], // Permissions for customers
+      children: [
+        {
+          component: "Footer"
         }
       ]
     }

@@ -6,6 +6,7 @@ import "velocity-animate/velocity.ui";
 import { Components } from "@reactioncommerce/reaction-components";
 import { Router } from "/client/api";
 import update from "react/lib/update";
+import CATEGORIES from "../../../../service/categories";
 
 const fieldNames = [
   "title",
@@ -255,6 +256,18 @@ class ProductAdmin extends Component {
               placeholder="Title"
               ref="titleInput"
               value={this.product.title}
+            />
+            <Components.Select
+              clearable={false}
+              i18nKeyLabel="productDetailEdit.Category"
+              i18nKeyPlaceholder="productDetailEdit.Category"
+              label="Category"
+              name="category"
+              onChange={this.handleSelectChange}
+              placeholder="Select a Category"
+              ref="productCategoryInput"
+              value={this.product.category}
+              options={CATEGORIES}
             />
             <Components.TextField
               helpText={this.permalink}

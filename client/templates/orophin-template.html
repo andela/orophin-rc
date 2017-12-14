@@ -3,13 +3,14 @@
     {{#if hasAdminAccess}}
     <div>
       {{> products}}
+      {{> layoutFooter}}
     </div>
     {{else}}
     <div>
       {{> advertiseCarousel}}
       {{> products}}
       {{> featuredProduct}}
-      {{> footer}}
+      {{> layoutFooter}}
     </div>
     {{/if}}
   </main>

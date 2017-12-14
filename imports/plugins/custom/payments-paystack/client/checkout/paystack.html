@@ -1,0 +1,11 @@
+<template name="paystackPaymentForm">
+  {{#autoForm schema=PaystackPayment id="paystack-payment-form" doc=showdoc}}
+  <button type="submit" id="completeOrder" class="rui btn btn-lg btn-cta btn-block btn-complete-order">
+    <img src="https://paystack.com/assets/website/images/brand/logo/mark.png" alt="paystack-logo">
+    <span id="btn-complete-order" data-i18n="checkoutPayment.completeYourOrder">
+      Continue with paystack
+    </span>
+    <i class="fa fa-spinner fa-spin hidden" id="btn-processing"></i>
+  </button>
+  {{/autoForm}}
+</template>
