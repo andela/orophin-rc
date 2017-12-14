@@ -13,3 +13,7 @@ Meteor.publish("ProductRatings", function (productId) {
   }
   return ProductRatings.find({ rateeId: productId });
 });
+
+Meteor.publish("ProductRating", () => {
+  return ProductRatings.find();
+});
