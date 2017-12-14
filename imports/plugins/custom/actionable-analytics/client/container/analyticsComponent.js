@@ -1,77 +1,102 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { registerComponent } from "@reactioncommerce/reaction-components";
 import ActionableAnalytics from "../components/actionableAnalytics";
+import { Products, ProductRatings } from "/lib/collections";
 
 
 class AnalyticsComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      orders: ""
+      topEarningProducts: [],
+      overviews: [],
+      ordersAnalytics: [],
+      statementOfAccount: [],
+      topSellingProducts: [],
+      topRatedProducts: [],
+      orders: "",
+      to: null,
+      tableDetails: [],
+      from: new Date(),
+      analyticsData: {}
     };
   }
 
-  setOrders = (orders) => {
-    this.setState({ orders });
-  }
-  getFirstDate(date) {
-    this.props.setFirstDate(date);
-  }
-  getSecondDate(date) {
-    this.props.setSecondDate(date);
+  componentDidMount = () => {
+    this.setup();
   }
 
-  changeTableData = (index) => {
-    this.setState({ tableData: this.props.tableData[ index ] });
-  }
-
-  getTopSellingData() {
+  getTopSellingData = () => {
     const topSellingProductCol = [
       { Header: "Product", accessor: "product" },
       { Header: "Quantity Sold", accessor: "quantitySold" }
     ];
     return {
       column: topSellingProductCol,
-      data: this.props.topSellingProducts
+      data: this.state.topSellingProducts
     };
   }
-  getTableDetails() {
-    const tableDetails = [this.getTopSellingData(), this.getTopEarningData(), this.getTopRatedProducts(), this.getStatement(), this.getOrderStatement()];
-    return tableDetails;
-  }
 
-  getTopEarningData() {
+  getTopEarningData = () => {
     const topEarningProductCol = [
       { Header: "Product", accessor: "product" },
       { Header: "Total Earnings", accessor: "totalSales" }
     ];
     return {
       column: topEarningProductCol,
-      data: this.props.topEarningProducts
+      data: this.state.topEarningProducts
     };
   }
 
-  getTopRatedProducts() {
+  getTopRatedProducts = () => {
     const topRatedProductCol = [
       { Header: "Product", accessor: "productName" },
       { Header: "Ratings", accessor: "rating" }
     ];
     return {
       column: topRatedProductCol,
-      data: this.props.topRatedProducts
+      data: this.state.topRatedProducts
     };
   }
-  getStatement() {
+
+  getStatement = () => {
     const statementCol = [{ Header: "Date", accessor: "dateString" },
       { Header: "Product Name", accessor: "title" },
       { Header: "Quntity", accessor: "quantity" },
       { Header: "Total Sales", accessor: "totalSales" }];
     return {
       column: statementCol,
-      data: this.props.statementOfAccount
+      data: this.state.statementOfAccount
     };
   }
-  getOrderStatement() {
+
+  getOverviews = (analyticsOrder) => {
+    return [
+      {
+        label: "Total Sales",
+        value: analyticsOrder.totalSales
+      },
+      {
+        label: "Total Shipping Cost",
+        value: analyticsOrder.totalShippingCost
+      },
+      {
+        label: "Total Items Purchased",
+        value: analyticsOrder.totalItemsPurchased
+      },
+      {
+        label: "Orders Cancelled",
+        value: analyticsOrder.ordersCancelled
+      },
+      {
+        label: "Total Orders Placed",
+        value: analyticsOrder.ordersAnalytics.length
+      }
+    ];
+  };
+
+  getOrderStatement = () => {
     const orderStatementCol = [{ Header: "Date", accessor: "date" },
       { Header: "Destination Country", accessor: "country" },
       { Header: "Destination City", accessor: "city" },
@@ -80,25 +105,64 @@ class AnalyticsComponent extends Component {
       { Header: "Payment Processor", accessor: "paymentProcessor" }];
     return {
       column: orderStatementCol,
-      data: this.props.ordersAnalytics
+      data: this.state.ordersAnalytics
     };
   }
 
+  getSelectedDate = (from, to) => {
+    this.setup(from, to);
+  }
+
+  setup = (from = null, to = new Date()) => {
+    const analyticsOrders = this.props.fetchDataWithDate(from, to);
+    const products = this.props.fetchDataWithDate(from, to, Products);
+    const analyticsData = this.props.extractAnalyticsItems(analyticsOrders);
+    this.setState({
+      analyticsData,
+      topRatedProducts: this.props.getTopRatedProducts(products),
+      overviews: this.getOverviews(analyticsData),
+      topEarningProducts: this.props.topEarning(analyticsData.analytics),
+      ordersAnalytics: analyticsData.ordersAnalytics,
+      topSellingProducts: this.props.topSelling(analyticsData.analytics),
+      statementOfAccount: this.props.statementsAnalysis(analyticsData.analyticsStatement)
+    });
+  }
+
+  getTableDetails = () => {
+    return [
+      this.state.overviews,
+      this.getTopSellingData(),
+      this.getTopEarningData(),
+      this.getTopRatedProducts(),
+      this.getStatement(),
+      this.getOrderStatement()
+    ];
+  }
+
   render() {
+    const table = this.getTableDetails();
+    const chartDataNameValue = [{}, { name: "product", value: "quantitySold" }, { name: "product", value: "salesSorter" },
+      { name: "productName", value: "rating" }, {}, {}];
     return (
       <ActionableAnalytics
-        overviews={this.props.overview}
-        getSecondDate={this.setSecondDate}
-        getFirstDate={this.setFirstDate}
-        initialStartDate={this.props.initialStartDate}
-        initialEndDate={this.props.initialEndDate}
-        tableDetails={this.getTableDetails()}
-        FetchDataWithDate={this.props.FetchDataWithDate}
-        setOrders={this.setOrders}
+        tableDetails={table}
+        chartDataNameValue={chartDataNameValue}
+        fetchDataWithDate={this.props.fetchDataWithDate}
+        getSelectedDate={this.getSelectedDate}
+        displayChartFor={this.props.displayChartFor}
       />
     );
   }
 }
 
+AnalyticsComponent.propTypes = {
+  displayChartFor: PropTypes.func.isRequired,
+  extractAnalyticsItems: PropTypes.func.isRequired,
+  fetchDataWithDate: PropTypes.func.isRequired,
+  getTopRatedProducts: PropTypes.func,
+  statementsAnalysis: PropTypes.func.isRequired,
+  topEarning: PropTypes.func.isRequired,
+  topSelling: PropTypes.func.isRequired
+};
 registerComponent("AnalyticsComponent", AnalyticsComponent);
 export default AnalyticsComponent;

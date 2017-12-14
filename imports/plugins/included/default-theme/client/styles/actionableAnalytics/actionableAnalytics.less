@@ -24,7 +24,7 @@
 }
 .actionable-table-wrapper {
   width: 95%;
-  margin: 0 auto;
+  margin: 0 auto 50px auto;
   border: 1px solid #e6e6e6;
 }
 .ReactTable {
@@ -39,10 +39,31 @@
   text-transform: capitalize;
 }
 
-.ReactTable .rt-thead .rt-th.-sort-asc, .ReactTable .rt-thead .rt-td.-sort-asc {
+.ReactTable .rt-thead .rt-th.-sort-asc,
+.ReactTable .rt-thead .rt-td.-sort-asc
+{
   box-shadow: inset 0 3px 0 0 @rui-brand-dark;
 }
+
 .tab-title {
   text-transform: capitalize;
   margin: 1em;
+}
+
+.recharts-wrapper {
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.ReactTable .rt-thead .rt-resizable-header-content {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+.ReactTable .rt-th,
+.ReactTable .rt-td,
+.rui.list-group-item .list-item-content
+{
+  font-size: 1.4rem;
 }
