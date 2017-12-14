@@ -131,7 +131,6 @@ class FeaturedProducts extends Component {
     }
   }
 
-
   displayPrice = (product) => {
     if (product.price && product.price.range) {
       return formatPriceString(product.price.range);
