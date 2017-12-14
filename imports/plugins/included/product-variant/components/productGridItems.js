@@ -53,27 +53,33 @@ class ProductGridItems extends Component {
     if (this.props.media() === false) {
       return (
         <span className="product-image" style={{ backgroundImage: "url('/resources/placeholder.gif')" }}>
-          <div className="image-overlay">
-            <div
-              className="overlay-circle"
-              onClick={this.addToCart}
-            >
-              <i className="fa fa-shopping-cart fa-2x" />
-            </div>
-          </div>
+          {
+            !this.props.isSearch ?
+              <div className="image-overlay">
+                <div
+                  className="overlay-circle"
+                  onClick={this.addToCart}
+                >
+                  <i className="fa fa-shopping-cart fa-2x" />
+                </div>
+              </div> : ""
+          }
         </span>
       );
     }
     return (
       <span className="product-image" style={{ backgroundImage: `url('${this.props.media().url({ store: "large" })}')` }}>
-        <div className="image-overlay">
-          <div
-            className="overlay-circle"
-            onClick={this.addToCart}
-          >
-            <i className="fa fa-shopping-cart fa-2x" />
-          </div>
-        </div>
+        {
+          !this.props.isSearch ?
+            <div className="image-overlay">
+              <div
+                className="overlay-circle"
+                onClick={this.addToCart}
+              >
+                <i className="fa fa-shopping-cart fa-2x" />
+              </div>
+            </div> : ""
+        }
       </span>
     );
   }
