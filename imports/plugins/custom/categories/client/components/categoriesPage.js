@@ -1,13 +1,10 @@
 import React from "react";
 import { registerComponent, composeWithTracker } from "@reactioncommerce/reaction-components";
-import { Meteor } from "meteor/meteor";
-import { Products, Shops } from "/lib/collections";
 import { Router } from "/client/api";
-import { Session } from "meteor/session";
 import { Reaction } from "/client/api";
-import { applyProductRevision } from "/lib/api/products";
 import ProductsComponent from "../../../../included/product-variant/components/products";
 import { wrapComponent  } from "../../../../included/product-variant/containers/productsContainer";
+import productsComposer from "../../../../service/products";
 
 const CATEGORIES = {
   "groceries": "GROCERIES",
@@ -37,43 +34,8 @@ const CategoriesPage = (props) => {
 };
 
 function composer(props, onData) {
-  window.prerenderReady = false;
-
-  let canLoadMoreProducts = false;
-
-  const scrollLimit = Session.get("productScrollLimit");
-  const category = Reaction.Router.current().params.category;
-  const productsSubscription = Meteor.subscribe("Products/category", scrollLimit, CATEGORIES[category]);
-
-  if (productsSubscription.ready()) {
-    window.prerenderReady = true;
-  }
-
-  const activeShopsIds = Shops.find({
-    $or: [
-      { "workflow.status": "active" },
-      { _id: Reaction.getPrimaryShopId() }
-    ]
-  }).fetch().map(activeShop => activeShop._id);
-
-  const productCursor = Products.find({
-    ancestors: [],
-    type: { $in: ["simple"] },
-    shopId: { $in: activeShopsIds }
-  });
-
-  const products = productCursor.map((product) => {
-    return applyProductRevision(product);
-  });
-
-  canLoadMoreProducts = productCursor.count() >= Session.get("productScrollLimit");
-  Session.set("productGrid/products", products);
-
-  onData(null, {
-    productsSubscription,
-    products,
-    canLoadMoreProducts
-  });
+  const category = Reaction.Router.getParam("category");
+  productsComposer(props, onData, CATEGORIES[category]);
 }
 
 registerComponent("CategoriesPage", CategoriesPage, composeWithTracker(composer));
