@@ -248,12 +248,45 @@
   letter-spacing: 0.3px;
 }
 
+.order-details-title .title-button{
+  display: inline-flex;
+}
+
 .order-details-title p {
   font-weight: 600;
   font-size: 14px;
   font-style: italic;
   color: #bbbbbb;
   letter-spacing: 0.4px;
+}
+
+.order-details-title .download-link{
+  margin-left: 45px;
+  margin-top: 1px;
+  color: #1c98d4;
+  font-weight: 600;
+  font-size: 14px;
+  font-style: italic;
+
+}
+
+@media screen and (max-width: 480px) {
+  .order-details-title p {
+    font-weight: 400;
+    font-size: 10px;
+    font-style: italic;
+    color: #bbbbbb;
+  }
+
+  .order-details-title .download-link{
+    margin-left: 2px;
+    margin-top: 1px;
+    color: #1c98d4;
+    font-weight: 400;
+    font-size: 10px;
+    font-style: italic;
+  
+  }
 }
 
 .order-details-quantity {
