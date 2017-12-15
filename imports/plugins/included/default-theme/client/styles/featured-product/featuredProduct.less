@@ -25,10 +25,48 @@ position:relative;
 transition:all .4s linear;
 }
 
+.image-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: rgba(49, 52, 53, 0.116);
+}
+
+.image-overlay .overlay-circle {
+  border-radius: 50%;
+  position: absolute;
+  background-color: #fe7f2c;
+  width: 60px;
+  height: 60px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
+.image-overlay .overlay-circle > i{
+  position: absolute;
+  color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
 .hovereffect:hover img {
 -ms-transform:scale(1.2);
 -webkit-transform:scale(1.2);
 transform:scale(1.2);
+}
+
+.hovereffect:hover .image-overlay {
+  opacity: 1;
 }
 
 .title {

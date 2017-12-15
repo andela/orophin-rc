@@ -230,3 +230,5 @@ Meteor.publish("Product", function (productIdOrHandle, shopIdOrSlug) {
     mediaCursor
   ];
 });
+
+Meteor.publish("products", () => Products.find());

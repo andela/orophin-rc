@@ -122,7 +122,7 @@
     transition:all .4s linear;
 
     img {
-      display: none;
+      display: block;
     }
 
     @media print {
@@ -132,10 +132,48 @@
     }
   }
 
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: rgba(49, 52, 53, 0.116);
+  }
+
+  .image-overlay .overlay-circle {
+    border-radius: 50%;
+    position: absolute;
+    background-color: #fe7f2c;
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+  }
+
+  .image-overlay .overlay-circle > i{
+    position: absolute;
+    color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+  }
+
   .product-image:hover {
     -ms-transform:scale(1.2);
     -webkit-transform:scale(1.2);
     transform:scale(1.2);
+  }
+
+  .product-image:hover .image-overlay {
+    opacity: 1;
   }
 
   .product-grid-item-images {
@@ -356,4 +394,27 @@
   width: auto;
   padding: 0;
   overflow: hidden;
+}
+
+.modal-header.title {
+  display: inline-flex;
+  width: 100%;
+}
+
+.modal-header.title button.close {
+  width: 40%;
+  text-align: end
+}
+
+.modal-body button.modal-variant-list {
+  display: block;
+  padding: 0;
+  border-color: #e6e6e6;
+  background: #ffffff;
+  margin-top: 5px;
+}
+
+.modal-footer .rui.btn-default.flat.btn-color {
+  background-color: #fe7922;
+  color: white;
 }
